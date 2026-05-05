@@ -1,0 +1,81 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: block;
+}
+
+.signal-stat-tile {
+  background: var(--ss-surface-1);
+  border: 1px solid var(--ss-border-subtle);
+  border-radius: 0;
+  box-sizing: border-box;
+  color: var(--ss-text-primary);
+  gap: 8px;
+  min-width: 0;
+  padding: 20px;
+}
+
+.signal-stat-tile__top {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.signal-stat-tile__label {
+  color: var(--ss-text-muted);
+  font-family: var(--ss-font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.signal-stat-tile__trend {
+  @include tokens.material-icon;
+}
+
+.signal-stat-tile__value {
+  color: var(--ss-text-primary);
+  font-family: var(--ss-font-mono);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  margin-top: 8px;
+}
+
+.signal-stat-tile__delta {
+  font-family: var(--ss-font-mono);
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+.signal-stat-tile--success .signal-stat-tile__trend,
+.signal-stat-tile--success .signal-stat-tile__delta {
+  color: var(--ss-status-success);
+}
+
+.signal-stat-tile--warning .signal-stat-tile__trend,
+.signal-stat-tile--warning .signal-stat-tile__delta {
+  color: var(--ss-status-warning);
+}
+
+.signal-stat-tile--error .signal-stat-tile__trend,
+.signal-stat-tile--error .signal-stat-tile__delta {
+  color: var(--ss-status-error);
+}
+
+.signal-stat-tile--info .signal-stat-tile__trend,
+.signal-stat-tile--info .signal-stat-tile__delta {
+  color: var(--ss-accent-primary);
+}
+
+.signal-stat-tile--neutral .signal-stat-tile__trend,
+.signal-stat-tile--neutral .signal-stat-tile__delta {
+  color: var(--ss-text-muted);
+}

@@ -20,6 +20,10 @@
     "@angular/material": "^21.2.9",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "@microsoft/signalr": "^8.0.7",
+    "chart.js": "^4.4.7",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^4.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

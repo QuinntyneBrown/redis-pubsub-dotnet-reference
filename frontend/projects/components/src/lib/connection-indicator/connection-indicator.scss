@@ -1,0 +1,67 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: inline-flex;
+}
+
+.connection-indicator {
+  align-items: center;
+  background: var(--ss-surface-2);
+  border: 1px solid var(--ss-border-subtle);
+  color: var(--ss-text-primary);
+  display: inline-flex;
+  font-family: var(--ss-font-mono);
+  gap: 10px;
+  min-height: 30px;
+  padding: 6px 12px;
+}
+
+.connection-indicator__dot {
+  background: var(--ss-status-success);
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+}
+
+.connection-indicator__icon {
+  @include tokens.material-icon;
+  color: currentColor;
+  font-size: 12px;
+}
+
+.connection-indicator__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.connection-indicator__latency {
+  color: var(--ss-text-muted);
+  font-size: 11px;
+}
+
+.connection-indicator--connected .connection-indicator__dot {
+  background: var(--ss-status-success);
+}
+
+.connection-indicator--reconnecting {
+  border-color: var(--ss-status-warning);
+  color: var(--ss-status-warning);
+}
+
+.connection-indicator--disconnected {
+  border-color: var(--ss-status-error);
+  color: var(--ss-status-error);
+}
+
+.connection-indicator--disconnected .connection-indicator__dot {
+  background: var(--ss-status-error);
+}
+
+.connection-indicator--paused {
+  border-color: var(--ss-accent-primary);
+  color: var(--ss-accent-primary);
+}

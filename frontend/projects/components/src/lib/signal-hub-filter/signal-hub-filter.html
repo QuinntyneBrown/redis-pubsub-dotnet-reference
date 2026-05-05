@@ -1,0 +1,48 @@
+<button mat-button class="signal-hub-filter__trigger" type="button" [matMenuTriggerFor]="menu">
+  <span>{{ triggerLabel }}</span>
+  <mat-icon class="material-symbols-sharp" aria-hidden="true">keyboard_arrow_down</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu" panelClass="signal-hub-filter-panel">
+  <div
+    class="signal-hub-filter__search"
+    (click)="$event.stopPropagation()"
+    (keydown)="$event.stopPropagation()"
+  >
+    <mat-icon class="material-symbols-sharp" aria-hidden="true">search</mat-icon>
+    <input
+      [value]="query"
+      [placeholder]="searchPlaceholder"
+      aria-label="Filter hubs"
+      type="search"
+      (input)="setQuery($event)"
+    />
+  </div>
+
+  @for (option of filteredOptions; track option.id) {
+    <button
+      mat-menu-item
+      class="signal-hub-filter__option"
+      [class.signal-hub-filter__option--selected]="option.id === selectedId"
+      type="button"
+      (click)="select(option)"
+    >
+      <span
+        class="signal-hub-filter__dot"
+        [class]="'signal-hub-filter__dot signal-hub-filter__dot--' + (option.tone ?? 'neutral')"
+        aria-hidden="true"
+      ></span>
+      <span class="signal-hub-filter__option-label">{{ option.label }}</span>
+      @if (option.rate) {
+        <span class="signal-hub-filter__rate">{{ option.rate }}</span>
+      }
+      @if (option.id === selectedId) {
+        <mat-icon class="material-symbols-sharp signal-hub-filter__check" aria-hidden="true">
+          check
+        </mat-icon>
+      }
+    </button>
+  } @empty {
+    <div class="signal-hub-filter__empty">No hubs found</div>
+  }
+</mat-menu>

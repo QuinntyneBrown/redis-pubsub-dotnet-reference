@@ -1,0 +1,41 @@
+@if (label) {
+  <label class="signal-input__label" [for]="inputId">{{ label }}</label>
+}
+
+<mat-form-field
+  appearance="outline"
+  class="signal-input__field"
+  [class.signal-input__field--mono]="mono"
+  [class.signal-input__field--error]="!!error"
+  subscriptSizing="dynamic"
+>
+  @if (icon) {
+    <mat-icon matPrefix class="material-symbols-sharp signal-input__icon" aria-hidden="true">
+      {{ icon }}
+    </mat-icon>
+  }
+
+  <input
+    matInput
+    [id]="inputId"
+    [type]="type"
+    [value]="value"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [readonly]="readonly"
+    [autocomplete]="autocomplete"
+    [attr.aria-invalid]="!!error"
+    [attr.aria-describedby]="error || hint ? inputId + '-message' : null"
+    (input)="onInput($event)"
+    (focus)="focused.emit($event)"
+    (blur)="blurred.emit($event)"
+  />
+</mat-form-field>
+
+@if (error) {
+  <div class="signal-input__message signal-input__message--error" [id]="inputId + '-message'">
+    {{ error }}
+  </div>
+} @else if (hint) {
+  <div class="signal-input__message" [id]="inputId + '-message'">{{ hint }}</div>
+}

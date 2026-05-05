@@ -1,0 +1,12 @@
+<mat-card class="signal-stat-tile" [class]="'signal-stat-tile signal-stat-tile--' + tone">
+  <div class="signal-stat-tile__top">
+    <span class="signal-stat-tile__label">{{ label }}</span>
+    <mat-icon class="material-symbols-sharp signal-stat-tile__trend" aria-hidden="true">
+      {{ trendIcon }}
+    </mat-icon>
+  </div>
+  <div class="signal-stat-tile__value">{{ value }}</div>
+  @if (delta) {
+    <div class="signal-stat-tile__delta">{{ delta }}</div>
+  }
+</mat-card>

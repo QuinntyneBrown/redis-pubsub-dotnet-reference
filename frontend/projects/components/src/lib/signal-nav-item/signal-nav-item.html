@@ -1,0 +1,15 @@
+<button
+  mat-button
+  class="signal-nav-item"
+  [class.signal-nav-item--active]="active"
+  [disabled]="disabled"
+  type="button"
+  (click)="onClick($event)"
+>
+  @if (icon) {
+    <mat-icon class="material-symbols-sharp signal-nav-item__icon" aria-hidden="true">
+      {{ icon }}
+    </mat-icon>
+  }
+  <span class="signal-nav-item__label">{{ label }}</span>
+</button>

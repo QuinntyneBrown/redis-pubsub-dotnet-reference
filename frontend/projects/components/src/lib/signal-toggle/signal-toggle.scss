@@ -1,0 +1,28 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: inline-flex;
+}
+
+.signal-toggle__label {
+  color: var(--ss-text-secondary);
+  font-family: var(--ss-font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+::ng-deep .signal-toggle .mdc-switch {
+  --mdc-switch-selected-focus-state-layer-color: var(--ss-accent-primary);
+  --mdc-switch-selected-handle-color: var(--ss-text-primary);
+  --mdc-switch-selected-hover-handle-color: var(--ss-text-primary);
+  --mdc-switch-selected-hover-track-color: var(--ss-accent-primary-dim);
+  --mdc-switch-selected-pressed-handle-color: var(--ss-text-primary);
+  --mdc-switch-selected-pressed-track-color: var(--ss-accent-primary-dim);
+  --mdc-switch-selected-track-color: var(--ss-accent-primary-dim);
+  --mdc-switch-unselected-handle-color: var(--ss-text-muted);
+  --mdc-switch-unselected-hover-handle-color: var(--ss-text-secondary);
+  --mdc-switch-unselected-hover-track-color: var(--ss-surface-elevated);
+  --mdc-switch-unselected-track-color: var(--ss-surface-2);
+}

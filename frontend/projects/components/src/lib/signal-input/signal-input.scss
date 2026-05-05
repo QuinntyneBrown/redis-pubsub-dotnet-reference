@@ -1,0 +1,91 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: block;
+  width: 280px;
+}
+
+.signal-input__label {
+  color: var(--ss-text-muted);
+  display: block;
+  font-family: var(--ss-font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.signal-input__field {
+  display: block;
+  width: 100%;
+}
+
+.signal-input__field--mono input {
+  font-family: var(--ss-font-mono);
+}
+
+.signal-input__icon {
+  @include tokens.material-icon;
+  color: var(--ss-text-muted);
+  margin-left: 4px;
+}
+
+.signal-input__message {
+  color: var(--ss-text-muted);
+  font-family: var(--ss-font-mono);
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.signal-input__message--error {
+  color: var(--ss-status-error);
+}
+
+::ng-deep .signal-input__field .mat-mdc-text-field-wrapper {
+  background: var(--ss-surface-2);
+  border-radius: 0;
+  min-height: 40px;
+}
+
+::ng-deep .signal-input__field .mat-mdc-form-field-flex {
+  min-height: 40px;
+}
+
+::ng-deep .signal-input__field .mat-mdc-form-field-infix {
+  min-height: 40px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
+::ng-deep .signal-input__field .mdc-notched-outline__leading,
+::ng-deep .signal-input__field .mdc-notched-outline__notch,
+::ng-deep .signal-input__field .mdc-notched-outline__trailing {
+  border-color: var(--ss-border-default);
+}
+
+::ng-deep .signal-input__field:hover .mdc-notched-outline__leading,
+::ng-deep .signal-input__field:hover .mdc-notched-outline__notch,
+::ng-deep .signal-input__field:hover .mdc-notched-outline__trailing,
+::ng-deep .signal-input__field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .signal-input__field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .signal-input__field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--ss-accent-primary);
+}
+
+::ng-deep .signal-input__field--error .mdc-notched-outline__leading,
+::ng-deep .signal-input__field--error .mdc-notched-outline__notch,
+::ng-deep .signal-input__field--error .mdc-notched-outline__trailing {
+  border-color: var(--ss-status-error);
+}
+
+::ng-deep .signal-input__field input.mat-mdc-input-element {
+  caret-color: var(--ss-accent-primary);
+  color: var(--ss-text-primary);
+  font-size: 13px;
+}
+
+::ng-deep .signal-input__field input.mat-mdc-input-element::placeholder {
+  color: var(--ss-text-faint);
+}

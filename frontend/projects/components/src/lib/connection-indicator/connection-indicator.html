@@ -1,0 +1,14 @@
+<div class="connection-indicator" [class]="'connection-indicator connection-indicator--' + state">
+  @if (icon) {
+    <mat-icon class="material-symbols-sharp connection-indicator__icon" aria-hidden="true">
+      {{ icon }}
+    </mat-icon>
+  } @else {
+    <span class="connection-indicator__dot" aria-hidden="true"></span>
+  }
+
+  <span class="connection-indicator__label">{{ resolvedLabel }}</span>
+  @if (latency) {
+    <span class="connection-indicator__latency">{{ latency }}</span>
+  }
+</div>

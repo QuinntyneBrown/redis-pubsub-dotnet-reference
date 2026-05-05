@@ -1,0 +1,14 @@
+<span
+  class="signal-avatar"
+  [class.signal-avatar--sm]="size === 'sm'"
+  [attr.aria-label]="label"
+  role="img"
+>
+  @if (icon) {
+    <mat-icon class="material-symbols-sharp signal-avatar__icon" aria-hidden="true">
+      {{ icon }}
+    </mat-icon>
+  } @else {
+    <span class="signal-avatar__initials">{{ initials }}</span>
+  }
+</span>

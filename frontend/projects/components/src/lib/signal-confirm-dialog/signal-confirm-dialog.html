@@ -1,0 +1,35 @@
+<section class="signal-confirm-dialog" role="dialog" [attr.aria-label]="title">
+  <header class="signal-confirm-dialog__header">
+    <div class="signal-confirm-dialog__title-group">
+      <mat-icon class="material-symbols-sharp signal-confirm-dialog__icon" aria-hidden="true">
+        warning
+      </mat-icon>
+      <h2>{{ title }}</h2>
+    </div>
+    <button
+      mat-icon-button
+      class="signal-confirm-dialog__close"
+      aria-label="Close"
+      type="button"
+      (click)="onCancel()"
+    >
+      <mat-icon class="material-symbols-sharp" aria-hidden="true">close</mat-icon>
+    </button>
+  </header>
+
+  <div class="signal-confirm-dialog__body">
+    <p>{{ message }}</p>
+    @if (details) {
+      <pre>{{ details }}</pre>
+    }
+  </div>
+
+  <footer class="signal-confirm-dialog__footer">
+    <lib-signal-button variant="ghost" [label]="cancelLabel" (pressed)="onCancel()"></lib-signal-button>
+    <lib-signal-button
+      [variant]="destructive ? 'destructive' : 'primary'"
+      [label]="confirmLabel"
+      (pressed)="onConfirm()"
+    ></lib-signal-button>
+  </footer>
+</section>

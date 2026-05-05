@@ -1,0 +1,27 @@
+<button
+  mat-button
+  class="signal-button"
+  [class.signal-button--primary]="variant === 'primary'"
+  [class.signal-button--secondary]="variant === 'secondary'"
+  [class.signal-button--ghost]="variant === 'ghost'"
+  [class.signal-button--destructive]="variant === 'destructive'"
+  [disabled]="disabled || loading"
+  [attr.type]="type"
+  (click)="onClick($event)"
+>
+  @if (loading) {
+    <mat-progress-spinner diameter="14" mode="indeterminate"></mat-progress-spinner>
+  } @else if (icon) {
+    <mat-icon class="material-symbols-sharp signal-button__icon" aria-hidden="true">
+      {{ icon }}
+    </mat-icon>
+  }
+
+  <span class="signal-button__label">
+    @if (label) {
+      {{ label }}
+    } @else {
+      <ng-content></ng-content>
+    }
+  </span>
+</button>

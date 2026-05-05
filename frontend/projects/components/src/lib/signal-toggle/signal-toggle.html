@@ -1,0 +1,10 @@
+<mat-slide-toggle
+  class="signal-toggle"
+  [checked]="checked"
+  [disabled]="disabled"
+  (change)="checkedChange.emit($event.checked)"
+>
+  @if (label) {
+    <span class="signal-toggle__label">{{ label }}</span>
+  }
+</mat-slide-toggle>

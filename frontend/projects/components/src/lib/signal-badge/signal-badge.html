@@ -1,0 +1,8 @@
+<mat-chip-set class="signal-badge-set" aria-label="Status">
+  <mat-chip class="signal-badge" [class]="'signal-badge signal-badge--' + tone" disableRipple>
+    @if (showDot) {
+      <span class="signal-badge__dot" aria-hidden="true"></span>
+    }
+    <span class="signal-badge__label">{{ label }}</span>
+  </mat-chip>
+</mat-chip-set>

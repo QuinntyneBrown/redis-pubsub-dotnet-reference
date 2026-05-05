@@ -1,0 +1,22 @@
+<article class="signal-toast" [class]="'signal-toast signal-toast--' + variant">
+  <mat-icon class="material-symbols-sharp signal-toast__icon" aria-hidden="true">
+    {{ resolvedIcon }}
+  </mat-icon>
+
+  <div class="signal-toast__body">
+    <div class="signal-toast__title">{{ title }}</div>
+    @if (message) {
+      <div class="signal-toast__message">{{ message }}</div>
+    }
+  </div>
+
+  @if (actionLabel) {
+    <button mat-button class="signal-toast__action" type="button" (click)="action.emit()">
+      {{ actionLabel }}
+    </button>
+  } @else {
+    <button mat-button class="signal-toast__action" type="button" (click)="dismissed.emit()">
+      {{ dismissLabel }}
+    </button>
+  }
+</article>

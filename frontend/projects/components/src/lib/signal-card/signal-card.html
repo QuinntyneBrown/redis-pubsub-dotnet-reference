@@ -1,0 +1,23 @@
+<mat-card class="signal-card" appearance="outlined">
+  @if (title || meta || icon) {
+    <header class="signal-card__header">
+      <div class="signal-card__title-group">
+        @if (icon) {
+          <mat-icon class="material-symbols-sharp signal-card__icon" aria-hidden="true">
+            {{ icon }}
+          </mat-icon>
+        }
+        @if (title) {
+          <span class="signal-card__title">{{ title }}</span>
+        }
+      </div>
+      @if (meta) {
+        <span class="signal-card__meta">{{ meta }}</span>
+      }
+    </header>
+  }
+
+  <section class="signal-card__body">
+    <ng-content></ng-content>
+  </section>
+</mat-card>

@@ -1,5 +1,19 @@
-/*
- * Public API Surface of components
- */
-
-export * from './lib/components';
+export * from './lib/app-shell/app-shell.component';
+export * from './lib/temperature-chart/temperature-chart.component';
+export * from './lib/rooms-table/rooms-table.component';
+export * from './lib/thermostat-control/thermostat-control.component';
+export * from './lib/models';
+export * from './lib/connection-indicator/connection-indicator';
+export * from './lib/signal-avatar/signal-avatar';
+export * from './lib/signal-badge/signal-badge';
+export * from './lib/signal-button/signal-button';
+export * from './lib/signal-card/signal-card';
+export * from './lib/signal-confirm-dialog/signal-confirm-dialog';
+export * from './lib/signal-hub-filter/signal-hub-filter';
+export * from './lib/signal-icon-button/signal-icon-button';
+export * from './lib/signal-input/signal-input';
+export * from './lib/signal-message-row/signal-message-row';
+export * from './lib/signal-nav-item/signal-nav-item';
+export * from './lib/signal-stat-tile/signal-stat-tile';
+export * from './lib/signal-toast/signal-toast';
+export * from './lib/signal-toggle/signal-toggle';

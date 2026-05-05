@@ -1,0 +1,58 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: inline-flex;
+}
+
+.signal-badge-set {
+  display: inline-flex;
+}
+
+.signal-badge {
+  --mdc-chip-container-height: 22px;
+  --mdc-chip-container-shape-radius: 0;
+  align-items: center;
+  border: 1px solid currentColor;
+  display: inline-flex;
+  font-family: var(--ss-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  gap: 6px;
+  height: 22px;
+  letter-spacing: 1.2px;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+
+.signal-badge__dot {
+  background: currentColor;
+  border-radius: 50%;
+  height: 6px;
+  width: 6px;
+}
+
+.signal-badge--success {
+  background: color-mix(in srgb, var(--ss-status-success) 10%, transparent);
+  color: var(--ss-status-success);
+}
+
+.signal-badge--warning {
+  background: color-mix(in srgb, var(--ss-status-warning) 10%, transparent);
+  color: var(--ss-status-warning);
+}
+
+.signal-badge--error {
+  background: color-mix(in srgb, var(--ss-status-error) 10%, transparent);
+  color: var(--ss-status-error);
+}
+
+.signal-badge--info {
+  background: color-mix(in srgb, var(--ss-accent-primary) 8%, transparent);
+  color: var(--ss-accent-primary);
+}
+
+.signal-badge--neutral {
+  background: var(--ss-surface-2);
+  color: var(--ss-text-secondary);
+}

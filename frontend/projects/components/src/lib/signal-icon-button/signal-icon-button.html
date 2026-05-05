@@ -1,0 +1,15 @@
+<button
+  mat-icon-button
+  class="signal-icon-button"
+  [class.signal-icon-button--active]="active"
+  [disabled]="disabled || loading"
+  [attr.aria-label]="label"
+  type="button"
+  (click)="onClick($event)"
+>
+  @if (loading) {
+    <mat-progress-spinner diameter="16" mode="indeterminate"></mat-progress-spinner>
+  } @else {
+    <mat-icon class="material-symbols-sharp" aria-hidden="true">{{ icon }}</mat-icon>
+  }
+</button>

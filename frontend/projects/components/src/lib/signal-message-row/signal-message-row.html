@@ -1,0 +1,15 @@
+<article class="signal-message-row" [class]="'signal-message-row signal-message-row--' + resolvedType">
+  <div class="signal-message-row__meta">
+    <span>{{ resolvedTimestamp }}</span>
+    <span>{{ resolvedChannel }}</span>
+  </div>
+
+  <div class="signal-message-row__body">
+    <div class="signal-message-row__topline">
+      <span class="signal-message-row__type">{{ resolvedType }}</span>
+      <span class="signal-message-row__divider" aria-hidden="true">/</span>
+      <span class="signal-message-row__title">{{ resolvedTitle }}</span>
+    </div>
+    <pre class="signal-message-row__payload">{{ formattedPayload }}</pre>
+  </div>
+</article>

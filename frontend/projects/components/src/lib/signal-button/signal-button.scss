@@ -1,0 +1,107 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: inline-flex;
+}
+
+.signal-button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 0;
+  box-sizing: border-box;
+  display: inline-flex;
+  font-family: var(--ss-font-body);
+  font-size: 13px;
+  font-weight: 600;
+  gap: 8px;
+  height: 36px;
+  justify-content: center;
+  letter-spacing: 1px;
+  line-height: 1;
+  min-width: 0;
+  padding: 0 16px;
+  text-transform: uppercase;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.signal-button:focus-visible {
+  @include tokens.focus-ring;
+}
+
+.signal-button:disabled {
+  background: var(--ss-surface-elevated);
+  border-color: var(--ss-border-subtle);
+  color: var(--ss-text-faint);
+  opacity: 1;
+}
+
+.signal-button--primary {
+  background: var(--ss-accent-primary);
+  color: #000000;
+}
+
+.signal-button--primary:hover:not(:disabled) {
+  background: #33e5ff;
+}
+
+.signal-button--primary:active:not(:disabled) {
+  background: var(--ss-accent-primary-dim);
+}
+
+.signal-button--secondary {
+  background: var(--ss-surface-elevated);
+  border-color: var(--ss-border-strong);
+  color: var(--ss-text-primary);
+}
+
+.signal-button--secondary:hover:not(:disabled) {
+  background: var(--ss-surface-overlay);
+  border-color: var(--ss-accent-primary);
+}
+
+.signal-button--secondary:active:not(:disabled) {
+  background: var(--ss-surface-3);
+}
+
+.signal-button--ghost {
+  background: transparent;
+  border-color: var(--ss-border-default);
+  color: var(--ss-text-secondary);
+  font-weight: 500;
+}
+
+.signal-button--ghost:hover:not(:disabled) {
+  background: var(--ss-surface-2);
+  border-color: var(--ss-border-strong);
+  color: var(--ss-text-primary);
+}
+
+.signal-button--destructive {
+  background: var(--ss-status-error);
+  color: var(--ss-text-primary);
+}
+
+.signal-button--destructive:hover:not(:disabled) {
+  background: #f87171;
+}
+
+.signal-button__icon,
+.signal-button mat-progress-spinner {
+  flex: 0 0 auto;
+}
+
+.signal-button__icon {
+  @include tokens.material-icon;
+}
+
+.signal-button__label {
+  display: inline-flex;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,139 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: block;
+}
+
+.signal-message-row {
+  background: var(--ss-surface-1);
+  border-left: 2px solid var(--ss-accent-primary);
+  box-sizing: border-box;
+  color: var(--ss-text-secondary);
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(112px, 148px) minmax(0, 1fr);
+  padding: 12px 16px;
+  width: 100%;
+}
+
+.signal-message-row__meta {
+  color: var(--ss-text-muted);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--ss-font-mono);
+  font-size: 11px;
+  gap: 4px;
+  min-width: 0;
+}
+
+.signal-message-row__meta span:last-child {
+  color: var(--ss-text-faint);
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signal-message-row__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.signal-message-row__topline {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.signal-message-row__type {
+  color: var(--ss-accent-primary);
+  font-family: var(--ss-font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.signal-message-row__divider {
+  color: var(--ss-text-faint);
+  font-family: var(--ss-font-mono);
+  font-size: 11px;
+}
+
+.signal-message-row__title {
+  color: var(--ss-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signal-message-row__payload {
+  color: var(--ss-text-secondary);
+  font-family: var(--ss-font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.signal-message-row--command {
+  border-left-color: var(--ss-status-success);
+}
+
+.signal-message-row--command .signal-message-row__type {
+  color: var(--ss-status-success);
+}
+
+.signal-message-row--query {
+  border-left-color: var(--ss-accent-secondary);
+}
+
+.signal-message-row--query .signal-message-row__type {
+  color: var(--ss-accent-secondary);
+}
+
+.signal-message-row--request {
+  border-left-color: var(--ss-status-warning);
+}
+
+.signal-message-row--request .signal-message-row__type {
+  color: var(--ss-status-warning);
+}
+
+.signal-message-row--error {
+  border-left-color: var(--ss-status-error);
+}
+
+.signal-message-row--error .signal-message-row__type {
+  color: var(--ss-status-error);
+}
+
+.signal-message-row--telemetry {
+  border-left-color: var(--ss-status-info);
+}
+
+.signal-message-row--telemetry .signal-message-row__type {
+  color: var(--ss-status-info);
+}
+
+@media (max-width: 640px) {
+  .signal-message-row {
+    gap: 8px;
+    grid-template-columns: 1fr;
+    padding: 10px 14px;
+  }
+
+  .signal-message-row__meta {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

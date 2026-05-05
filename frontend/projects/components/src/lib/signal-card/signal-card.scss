@@ -1,0 +1,66 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: block;
+}
+
+.signal-card {
+  background: var(--ss-surface-1);
+  border: 1px solid var(--ss-border-subtle);
+  border-radius: 0;
+  color: var(--ss-text-primary);
+  overflow: hidden;
+}
+
+.signal-card__header {
+  align-items: center;
+  background: var(--ss-surface-2);
+  border-bottom: 1px solid var(--ss-border-subtle);
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  min-height: 40px;
+  padding: 0 16px;
+}
+
+.signal-card__title-group {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.signal-card__icon {
+  @include tokens.material-icon;
+  color: var(--ss-accent-primary);
+}
+
+.signal-card__title,
+.signal-card__meta {
+  font-family: var(--ss-font-mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.signal-card__title {
+  color: var(--ss-text-primary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.signal-card__meta {
+  color: var(--ss-text-muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.signal-card__body {
+  color: var(--ss-text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 16px;
+}

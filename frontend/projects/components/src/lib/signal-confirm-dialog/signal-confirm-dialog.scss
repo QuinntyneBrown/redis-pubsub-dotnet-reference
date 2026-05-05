@@ -1,0 +1,106 @@
+@use '../styles/tokens' as tokens;
+
+:host {
+  @include tokens.host-tokens;
+  display: block;
+}
+
+.signal-confirm-dialog {
+  background: var(--ss-surface-1);
+  border: 1px solid var(--ss-border-strong);
+  color: var(--ss-text-primary);
+  width: min(420px, 100%);
+}
+
+.signal-confirm-dialog__header {
+  align-items: center;
+  background: var(--ss-surface-2);
+  border-bottom: 1px solid var(--ss-border-subtle);
+  display: flex;
+  height: 48px;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.signal-confirm-dialog__title-group {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+}
+
+.signal-confirm-dialog__icon {
+  @include tokens.material-icon;
+  color: var(--ss-status-warning);
+  flex: 0 0 auto;
+}
+
+.signal-confirm-dialog h2 {
+  color: var(--ss-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signal-confirm-dialog__close {
+  color: var(--ss-text-muted);
+  height: 32px;
+  width: 32px;
+}
+
+.signal-confirm-dialog__close .mat-icon {
+  @include tokens.material-icon;
+}
+
+.signal-confirm-dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+.signal-confirm-dialog__body p {
+  color: var(--ss-text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.signal-confirm-dialog__body pre {
+  background: var(--ss-surface-base);
+  border: 1px solid var(--ss-border-subtle);
+  color: var(--ss-accent-primary);
+  font-family: var(--ss-font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+.signal-confirm-dialog__footer {
+  align-items: center;
+  background: var(--ss-surface-base);
+  border-top: 1px solid var(--ss-border-subtle);
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+@media (max-width: 520px) {
+  .signal-confirm-dialog {
+    width: 100%;
+  }
+
+  .signal-confirm-dialog__footer {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+}
