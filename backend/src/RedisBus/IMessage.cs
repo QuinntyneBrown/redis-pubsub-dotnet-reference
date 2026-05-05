@@ -9,3 +9,5 @@ public interface IEvent : IMessage { }
 public interface IQuery<TResponse> : IMessage { }
 
 public interface IRequest<TResponse> : IMessage { }
+
+public interface ICommand<TResponse> : IMessage { }

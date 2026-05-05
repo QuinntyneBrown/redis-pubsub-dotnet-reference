@@ -13,6 +13,10 @@ public sealed record SampleRequest(
     [property: Range(0, 100)] int Value) : IRequest<SampleRequestAck>;
 public sealed record SampleRequestAck(string Key, int Applied);
 
+public sealed record SampleCommand(
+    [property: Required] string Profile) : ICommand<SampleCommandAck>;
+public sealed record SampleCommandAck(string SessionId, string Profile);
+
 public static class Inbox
 {
     public static ConcurrentBag<object> Received { get; } = new();
@@ -47,4 +51,10 @@ public sealed class SampleRequestResponder : IRespond<SampleRequest, SampleReque
 {
     public Task<SampleRequestAck> RespondAsync(SampleRequest message, MessageContext context, CancellationToken cancellationToken)
         => Task.FromResult(new SampleRequestAck(message.Key, message.Value));
+}
+
+public sealed class SampleCommandResponder : IRespond<SampleCommand, SampleCommandAck>
+{
+    public Task<SampleCommandAck> RespondAsync(SampleCommand message, MessageContext context, CancellationToken cancellationToken)
+        => Task.FromResult(new SampleCommandAck("session-" + message.Profile, message.Profile));
 }

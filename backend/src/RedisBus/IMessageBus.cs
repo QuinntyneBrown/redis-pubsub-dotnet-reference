@@ -7,4 +7,6 @@ public interface IMessageBus
     Task<TResponse> SendAsync<TResponse>(IQuery<TResponse> query, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    Task<TResponse> SendAsync<TResponse>(ICommand<TResponse> command, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 }

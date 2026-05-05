@@ -17,4 +17,8 @@ public sealed record SetValue(
     [property: Range(0, 100)] int Value) : IRequest<SetValueAck>;
 public sealed record SetValueAck(string Key, int Value);
 
+public sealed record StartSimulation(
+    [property: Required] string Profile) : ICommand<StartSimulationAck>;
+public sealed record StartSimulationAck(string SessionId);
+
 public sealed record NotAMessage(string Foo);

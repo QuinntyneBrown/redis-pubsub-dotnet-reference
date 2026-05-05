@@ -37,6 +37,13 @@ public class ChannelNamerTests
     }
 
     [Fact]
+    public void Command_uses_cmd_prefix()
+    {
+        _namer.ForMessage(typeof(SampleMessages.StartSimulation))
+            .Should().Be("cmd.SampleMessages.StartSimulation");
+    }
+
+    [Fact]
     public void Reply_channel_includes_service_and_instance()
     {
         _namer.ForReply("api-gateway", "abc123")

@@ -22,10 +22,11 @@ internal sealed class ChannelNamer
             var def = iface.GetGenericTypeDefinition();
             if (def == typeof(IQuery<>)) return "qry";
             if (def == typeof(IRequest<>)) return "req";
+            if (def == typeof(ICommand<>)) return "cmd";
         }
 
         throw new InvalidOperationException(
-            $"{messageType.FullName} must implement ITelemetry, IEvent, IQuery<T>, or IRequest<T>.");
+            $"{messageType.FullName} must implement ITelemetry, IEvent, IQuery<T>, IRequest<T>, or ICommand<T>.");
     }
 
     private static string ShortName(Type t)

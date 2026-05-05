@@ -48,6 +48,9 @@ internal sealed class MessageBus : IMessageBus
     public Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
         => SendInternal<TResponse>(request, timeout, cancellationToken);
 
+    public Task<TResponse> SendAsync<TResponse>(ICommand<TResponse> command, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+        => SendInternal<TResponse>(command, timeout, cancellationToken);
+
     private async Task<TResponse> SendInternal<TResponse>(IMessage message, TimeSpan? timeout, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(message);
