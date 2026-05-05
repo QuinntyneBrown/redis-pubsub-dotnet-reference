@@ -7,14 +7,20 @@ title Frontend Dashboard - Container Diagram
 Person(user, "Operator")
 
 System_Boundary(browser, "Web Browser") {
-    Container(spa, "Angular SPA", "Angular + Material + Chart.js + @microsoft/signalr", "Single dashboard page")
+    Container_Boundary(workspace, "Angular Workspace (frontend/)") {
+        Container(app, "smart-building-demo", "Angular application", "Composes the dashboard, provides DI tokens with concrete impls")
+        Container(comps_lib, "components", "Angular library", "Reusable presentation components built from docs/ui-design.pen")
+        Container(api_lib, "api", "Angular library", "Backend models, service contracts, DI tokens, implementations")
+    }
 }
 
 Container(bff, "BFF", ".NET 9 / SignalR", "Frontend door")
 ContainerDb(redis, "Redis", "Redis 7", "Pub/Sub")
 
-Rel(user, spa, "Uses", "HTTPS")
-Rel(spa, bff, "HttpClient: POST /api/...\nHubConnection: /hub", "JSON / WS")
+Rel(user, app, "Uses", "HTTPS")
+Rel(app, comps_lib, "imports widgets")
+Rel(app, api_lib, "imports tokens, models;\nregisters impls")
+Rel(api_lib, bff, "HttpClient: POST /api/...\nHubConnection: /hub", "JSON / WS")
 Rel(bff, redis, "PUB/SUB", "RESP")
 
 @enduml

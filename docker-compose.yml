@@ -4,10 +4,10 @@ services:
     ports:
       - "6379:6379"
 
-  api-gateway:
+  bff:
     build:
       context: ./backend
-      dockerfile: src/ApiGateway/Dockerfile
+      dockerfile: src/BffService/Dockerfile
     environment:
       Redis__ConnectionString: redis:6379
     ports:

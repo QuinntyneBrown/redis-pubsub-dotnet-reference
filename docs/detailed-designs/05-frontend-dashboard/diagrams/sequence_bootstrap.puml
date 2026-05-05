@@ -2,20 +2,27 @@
 !theme plain
 skinparam sequenceMessageAlign center
 
-title Bootstrap: connect, subscribe, seed, render
+title Bootstrap: connect, subscribe, seed, render\n(DashboardComponent injects via tokens — sees only the contracts)
 
 actor User
 participant "Browser" as Br
-participant "DashboardComponent" as Dash
-participant "SignalRClient" as SR
-participant "BackendClient" as BC
+participant "DashboardComponent\n(smart-building-demo)" as Dash
+participant "ISignalRClient\n(impl: SignalRClient @ api)" as SR
+participant "IBackendClient\n(impl: BackendClient @ api)" as BC
 participant "BFF" as BFF
-participant "RoomStateStore" as RS
-participant "TelemetryStore" as TS
-participant "Chart / Table" as UI
+participant "IRoomStateStore\n(impl: RoomStateStore @ api)" as RS
+participant "ITelemetryStore\n(impl: TelemetryStore @ api)" as TS
+participant "components/* widgets" as UI
 
 User -> Br: navigate to /
 Br -> Dash: ngOnInit()
+
+note over Dash
+  inject(BACKEND_CLIENT)
+  inject(SIGNALR_CLIENT)
+  inject(ROOM_STATE_STORE)
+  inject(TELEMETRY_STORE)
+end note
 
 Dash -> SR: start()
 SR -> BFF: WS connect /hub
@@ -31,13 +38,13 @@ RS -> BC: query("Contracts.Queries.ListRooms", {})
 BC -> BFF: POST /api/queries
 BFF --> BC: ListRoomsResult
 BC --> RS: rooms[]
-RS --> UI: rooms$ emits
+RS --> UI: rooms$ → [rooms] Input
 
 == live updates ==
 
 BFF -> SR: OnMessage("tel.Contracts.TemperatureReading", envelope)
 SR -> TS: append point
-TS --> UI: temperatureSeries$ emits
+TS --> UI: temperatureSeries$ → [series] Input
 UI --> User: chart updates (throttled)
 
 @enduml

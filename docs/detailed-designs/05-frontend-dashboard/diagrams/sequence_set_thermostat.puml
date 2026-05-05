@@ -2,32 +2,35 @@
 !theme plain
 skinparam sequenceMessageAlign center
 
-title User sets thermostat (HTTP request + SignalR event)
+title User sets thermostat (HTTP request + SignalR event)\nPresentation widget emits (submit); container component calls IBackendClient
 
 actor User
-participant "ThermostatControl" as TC
-participant "BackendClient" as BC
+participant "ThermostatControl\n(components lib)" as TC
+participant "DashboardComponent\n(container, smart-building-demo)" as Dash
+participant "IBackendClient\n(impl: BackendClient @ api)" as BC
 participant "BFF" as BFF
 participant "Backend Mesh" as Mesh
 participant "BFF Hub" as Hub
-participant "RoomStateStore" as RS
+participant "IRoomStateStore\n(impl: RoomStateStore @ api)" as RS
 participant "Snackbar" as Snack
 
 User -> TC: select room R-101, set 22 C, Submit
-TC -> BC: request<SetThermostatAck>("Contracts.Requests.SetThermostat",\n  { roomId: "R-101", targetC: 22 })
+TC -> Dash: (submit) emits { roomId: "R-101", targetC: 22 }
+Dash -> BC: request<SetThermostatAck>("Contracts.Requests.SetThermostat",\n  { roomId: "R-101", targetC: 22 })
 BC -> BFF: POST /api/requests
 BFF -> Mesh: dispatch via RedisBus (Control -> Actuator)
 Mesh --> BFF: SetThermostatAck { roomId, deviceId, effectiveC: 22 }
 BFF --> BC: 200 { ack }
-BC --> TC: ack
-TC -> Snack: open("Applied 22 C to R-101")
+BC --> Dash: ack
+Dash -> Snack: open("Applied 22 C to R-101")
 
 == broadcast event reaches the same SPA ==
 
 Mesh -> BFF: PUBLISH evt.Contracts.ThermostatChanged
 BFF -> Hub: OnMessage("evt.Contracts.ThermostatChanged", envelope)
 Hub -> RS: merge ThermostatChanged
-RS -> TC: rooms$ emits updated room
+RS -> Dash: rooms$ emits updated room
+Dash -> TC: [rooms] Input refreshed
 TC --> User: table row reflects new effectiveC
 
 @enduml

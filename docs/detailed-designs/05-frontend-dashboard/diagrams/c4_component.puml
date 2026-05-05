@@ -2,38 +2,53 @@
 !theme plain
 !include <C4/C4_Component>
 
-title Angular Dashboard - Component Diagram
+title Angular Dashboard - Component Diagram (Workspace projects)
 
 Container(bff, "BFF", ".NET 9 / SignalR")
 
 Container_Boundary(spa, "Angular SPA") {
-    Component(shell, "AppShellComponent", "Angular standalone", "Material toolbar + status chip")
-    Component(dash, "DashboardComponent", "Angular standalone", "Composes the three live widgets")
-    Component(chart, "TemperatureChartComponent", "Angular + Chart.js", "Live line chart, one line per room")
-    Component(table, "RoomsTableComponent", "Angular Material mat-table", "Live room snapshot table")
-    Component(thermo, "ThermostatControlComponent", "Angular Material form", "Slider + submit -> command")
 
-    Component(sr, "SignalRClient", "Service", "@microsoft/signalr HubConnection")
-    Component(http, "BackendClient", "Service", "HttpClient command/query/request")
-    Component(rs, "RoomStateStore", "Service", "BehaviorSubject<RoomSnapshot[]>")
-    Component(ts, "TelemetryStore", "Service", "Rolling temperature series per room")
+    Container_Boundary(api_lib, "api (library)") {
+        Component(models, "models/*", "TS interfaces", "TemperatureReading, RoomStatus, SetThermostatAck, ...")
+        Component(contracts, "contracts/*", "TS interfaces", "IBackendClient, ISignalRClient,\nIRoomStateStore, ITelemetryStore")
+        Component(tokens, "tokens/*", "InjectionToken<T>", "BACKEND_CLIENT, SIGNALR_CLIENT,\nROOM_STATE_STORE, TELEMETRY_STORE")
+        Component(impl_http, "BackendClient", "Service impl", "implements IBackendClient")
+        Component(impl_sr, "SignalRClient", "Service impl", "implements ISignalRClient")
+        Component(impl_rs, "RoomStateStore", "Service impl", "implements IRoomStateStore")
+        Component(impl_ts, "TelemetryStore", "Service impl", "implements ITelemetryStore")
+    }
+
+    Container_Boundary(comps, "components (library, built from ui-design.pen)") {
+        Component(c_shell, "AppShellComponent", "Presentation", "Material toolbar + status chip")
+        Component(c_chart, "TemperatureChartComponent", "Presentation", "Chart.js line chart")
+        Component(c_table, "RoomsTableComponent", "Presentation", "Material mat-table")
+        Component(c_thermo, "ThermostatControlComponent", "Presentation", "Slider + submit form")
+    }
+
+    Container_Boundary(app, "smart-building-demo (application)") {
+        Component(config, "AppConfig", "ApplicationConfig", "provide(token, useClass: impl)")
+        Component(dash, "DashboardComponent", "Container", "inject(TOKEN); composes widgets")
+    }
 }
 
-Rel(shell, dash, "renders")
-Rel(dash, chart, "renders")
-Rel(dash, table, "renders")
-Rel(dash, thermo, "renders")
+Rel(impl_http, contracts, "implements")
+Rel(impl_sr, contracts, "implements")
+Rel(impl_rs, contracts, "implements")
+Rel(impl_ts, contracts, "implements")
 
-Rel(dash, sr, "start / subscribe")
-Rel(table, rs, "rooms$")
-Rel(chart, ts, "temperatureSeries$")
-Rel(thermo, http, "command()")
+Rel(config, tokens, "registers impls\nagainst tokens")
 
-Rel(rs, sr, "messages$ (evt.*)")
-Rel(ts, sr, "messages$ (tel.*)")
-Rel(rs, http, "ListRooms (seed)")
+Rel(dash, tokens, "inject(TOKEN)")
+Rel(dash, c_shell, "renders <app-shell>")
+Rel(dash, c_chart, "<app-temperature-chart [series]>")
+Rel(dash, c_table, "<app-rooms-table [rooms]>")
+Rel(dash, c_thermo, "<app-thermostat-control [rooms] (submit)>")
 
-Rel(sr, bff, "WebSocket /hub", "WS")
-Rel(http, bff, "POST /api/...", "JSON/HTTPS")
+Rel(impl_rs, impl_sr, "messages$ (evt.*)")
+Rel(impl_ts, impl_sr, "messages$ (tel.*)")
+Rel(impl_rs, impl_http, "ListRooms (seed)")
+
+Rel(impl_sr, bff, "WebSocket /hub", "WS")
+Rel(impl_http, bff, "POST /api/...", "JSON/HTTPS")
 
 @enduml

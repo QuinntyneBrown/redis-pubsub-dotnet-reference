@@ -3,60 +3,101 @@
 skinparam classAttributeIconSize 0
 skinparam classFontSize 12
 
-title Angular Dashboard - Domain Model
+title Angular Dashboard - Domain Model (Contracts + Implementations + Tokens)
 
-class SignalRClient {
-    -HubConnection conn
-    +start(): Promise<void>
-    +subscribe(channel): Promise<void>
-    +unsubscribe(channel): Promise<void>
-    +unsubscribeAll(): Promise<void>
-    +send<T>(typeName, payload): Promise<T>
-    +messages$: Observable<{channel, envelope}>
-    +connectionState$: Observable<state>
+package "api lib" {
+
+    interface IBackendClient {
+        +command<T>(type, payload): Promise<T>
+        +query<T>(type, payload): Promise<T>
+        +request<T>(type, payload): Promise<T>
+    }
+
+    interface ISignalRClient {
+        +start(): Promise<void>
+        +subscribe(channel): Promise<void>
+        +unsubscribe(channel): Promise<void>
+        +unsubscribeAll(): Promise<void>
+        +send<T>(typeName, payload): Promise<T>
+        +messages$: Observable<{channel, envelope}>
+        +connectionState$: Observable<state>
+    }
+
+    interface IRoomStateStore {
+        +rooms$: Observable<RoomStatus[]>
+        +seed(): Promise<void>
+    }
+
+    interface ITelemetryStore {
+        +temperatureSeries$: Observable<Map<roomId, Point[]>>
+    }
+
+    class BackendClient
+    class SignalRClient
+    class RoomStateStore
+    class TelemetryStore
+
+    class "Tokens" as TOK <<DI tokens>> {
+        +BACKEND_CLIENT: InjectionToken<IBackendClient>
+        +SIGNALR_CLIENT: InjectionToken<ISignalRClient>
+        +ROOM_STATE_STORE: InjectionToken<IRoomStateStore>
+        +TELEMETRY_STORE: InjectionToken<ITelemetryStore>
+    }
+
+    BackendClient   ..|> IBackendClient
+    SignalRClient   ..|> ISignalRClient
+    RoomStateStore  ..|> IRoomStateStore
+    TelemetryStore  ..|> ITelemetryStore
+
+    RoomStateStore --> ISignalRClient : messages$
+    RoomStateStore --> IBackendClient : ListRooms seed
+    TelemetryStore --> ISignalRClient : messages$
 }
 
-class BackendClient {
-    +command<T>(type, payload): Promise<T>
-    +query<T>(type, payload): Promise<T>
-    +request<T>(type, payload): Promise<T>
+package "components lib" {
+    class AppShellComponent {
+        +title: Input<string>
+        +connectionState: Input<state>
+    }
+    class TemperatureChartComponent {
+        +series: Input<Map<roomId, Point[]>>
+    }
+    class RoomsTableComponent {
+        +rooms: Input<RoomStatus[]>
+    }
+    class ThermostatControlComponent {
+        +rooms: Input<RoomStatus[]>
+        +submit: Output<{roomId, targetC}>
+    }
 }
 
-class RoomStateStore {
-    -BehaviorSubject<RoomSnapshot[]> _rooms
-    +rooms$: Observable<RoomSnapshot[]>
-    +seed(): Promise<void>
+package "smart-building-demo app" {
+    class AppConfig <<provider>> {
+        +providers:
+        \t{ provide: BACKEND_CLIENT,   useClass: BackendClient   }
+        \t{ provide: SIGNALR_CLIENT,   useClass: SignalRClient   }
+        \t{ provide: ROOM_STATE_STORE, useClass: RoomStateStore  }
+        \t{ provide: TELEMETRY_STORE,  useClass: TelemetryStore  }
+    }
+    class DashboardComponent {
+        -backend: IBackendClient
+        -signalR: ISignalRClient
+        -rooms: IRoomStateStore
+        -telemetry: ITelemetryStore
+        +ngOnInit()
+        +ngOnDestroy()
+    }
 }
 
-class TelemetryStore {
-    -Map<roomId, Point[]> _series
-    +temperatureSeries$: Observable<Map<roomId, Point[]>>
-}
+AppConfig ..> TOK : registers impls
+DashboardComponent ..> IBackendClient   : inject(BACKEND_CLIENT)
+DashboardComponent ..> ISignalRClient   : inject(SIGNALR_CLIENT)
+DashboardComponent ..> IRoomStateStore  : inject(ROOM_STATE_STORE)
+DashboardComponent ..> ITelemetryStore  : inject(TELEMETRY_STORE)
 
-class DashboardComponent {
-    +ngOnInit()
-    +ngOnDestroy()
-}
-
-class TemperatureChartComponent
-class RoomsTableComponent
-class ThermostatControlComponent
-
-DashboardComponent --> SignalRClient
-DashboardComponent --> BackendClient
-DashboardComponent --> RoomStateStore
-DashboardComponent --> TelemetryStore
-
+DashboardComponent *-- AppShellComponent
 DashboardComponent *-- TemperatureChartComponent
 DashboardComponent *-- RoomsTableComponent
 DashboardComponent *-- ThermostatControlComponent
-
-TemperatureChartComponent --> TelemetryStore
-RoomsTableComponent --> RoomStateStore
-ThermostatControlComponent --> BackendClient
-
-RoomStateStore --> SignalRClient : messages$
-RoomStateStore --> BackendClient : ListRooms seed
-TelemetryStore --> SignalRClient : messages$
 
 @enduml
