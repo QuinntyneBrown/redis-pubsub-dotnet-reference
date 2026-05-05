@@ -11,6 +11,7 @@ import {
 } from 'api';
 
 import { routes } from './app.routes';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideAnimationsAsync(),
-    { provide: BFF_BASE_URL, useValue: 'http://localhost:8080' },
+    { provide: BFF_BASE_URL, useValue: environment.bffBaseUrl },
     { provide: BACKEND_CLIENT, useClass: BackendClient },
     { provide: SIGNALR_CLIENT, useClass: SignalRClient },
     { provide: ROOM_STATE_STORE, useClass: RoomStateStore },
