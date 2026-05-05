@@ -1,0 +1,38 @@
+## .NET
+bin/
+obj/
+out/
+*.user
+*.suo
+*.userprefs
+*.cache
+.vs/
+.vscode/
+*.binlog
+
+## Rider / Resharper
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+## Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+## Build output
+artifacts/
+publish/
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Secrets
+*.env
+*.env.*
+!*.env.example
+
+## Claude Code
+.claude/
