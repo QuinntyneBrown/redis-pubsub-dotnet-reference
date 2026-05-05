@@ -1,6 +1,6 @@
 # Backend-for-Frontend (BFF) Service — Detailed Design
 
-**Status:** Draft
+**Status:** Accepted
 
 ## 1. Overview
 
