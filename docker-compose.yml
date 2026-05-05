@@ -6,7 +6,7 @@ services:
 
   api-gateway:
     build:
-      context: .
+      context: ./backend
       dockerfile: src/ApiGateway/Dockerfile
     environment:
       Redis__ConnectionString: redis:6379
@@ -17,7 +17,7 @@ services:
 
   sensor-service:
     build:
-      context: .
+      context: ./backend
       dockerfile: src/SensorService/Dockerfile
     environment:
       Redis__ConnectionString: redis:6379
@@ -26,7 +26,7 @@ services:
 
   telemetry-aggregator:
     build:
-      context: .
+      context: ./backend
       dockerfile: src/TelemetryAggregator/Dockerfile
     environment:
       Redis__ConnectionString: redis:6379
@@ -37,7 +37,7 @@ services:
 
   building-service:
     build:
-      context: .
+      context: ./backend
       dockerfile: src/BuildingService/Dockerfile
     environment:
       Redis__ConnectionString: redis:6379
@@ -48,7 +48,7 @@ services:
 
   control-service:
     build:
-      context: .
+      context: ./backend
       dockerfile: src/ControlService/Dockerfile
     environment:
       Redis__ConnectionString: redis:6379
@@ -59,7 +59,7 @@ services:
 
   actuator-service:
     build:
-      context: .
+      context: ./backend
       dockerfile: src/ActuatorService/Dockerfile
     environment:
       Redis__ConnectionString: redis:6379

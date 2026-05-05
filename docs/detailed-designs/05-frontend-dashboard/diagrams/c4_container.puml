@@ -1,0 +1,20 @@
+@startuml c4_container
+!theme plain
+!include <C4/C4_Container>
+
+title Frontend Dashboard - Container Diagram
+
+Person(user, "Operator")
+
+System_Boundary(browser, "Web Browser") {
+    Container(spa, "Angular SPA", "Angular + Material + Chart.js + @microsoft/signalr", "Single dashboard page")
+}
+
+Container(bff, "BFF", ".NET 9 / SignalR", "Frontend door")
+ContainerDb(redis, "Redis", "Redis 7", "Pub/Sub")
+
+Rel(user, spa, "Uses", "HTTPS")
+Rel(spa, bff, "HttpClient: POST /api/...\nHubConnection: /hub", "JSON / WS")
+Rel(bff, redis, "PUB/SUB", "RESP")
+
+@enduml

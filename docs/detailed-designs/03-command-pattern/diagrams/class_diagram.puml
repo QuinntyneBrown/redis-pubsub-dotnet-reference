@@ -1,0 +1,40 @@
+@startuml class_diagram
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+
+title Command Pattern - Public API additions
+
+interface IMessage
+
+interface "ITelemetry" as Tel
+interface "IEvent" as Evt
+interface "IQuery<TResponse>" as Qry
+interface "IRequest<TResponse>" as Req
+interface "ICommand<TResponse>" as Cmd <<new>>
+
+IMessage <|-- Tel
+IMessage <|-- Evt
+IMessage <|-- Qry
+IMessage <|-- Req
+IMessage <|-- Cmd
+
+interface "IRespond<TMessage, TResponse>" as Resp {
+    +RespondAsync(message, ctx, ct): Task<TResponse>
+}
+
+interface IMessageBus {
+    +PublishAsync<T>(message, ct): Task
+    +SendAsync<TResp>(IQuery<TResp>, timeout, ct): Task<TResp>
+    +SendAsync<TResp>(IRequest<TResp>, timeout, ct): Task<TResp>
+    +SendAsync<TResp>(ICommand<TResp>, timeout, ct): Task<TResp>  <<new>>
+}
+
+note right of Cmd
+    Same wire mechanism as IRequest<T>:
+    publish to **cmd.<TypeName>**, await
+    correlated reply on rep.{svc}.{instance}.
+    Distinct marker for semantic clarity.
+end note
+
+@enduml

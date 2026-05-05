@@ -1,0 +1,20 @@
+@startuml c4_context
+!theme plain
+!include <C4/C4_Context>
+
+title Frontend Dashboard - System Context
+
+Person(user, "Operator", "Building operator using a web browser")
+System(spa, "Angular Dashboard SPA", "Angular Material (dark) + Chart.js + SignalR")
+System(bff, "BFF Service", ".NET 9 - HTTP + SignalR")
+System_Boundary(backend, "Backend") {
+    System(redis, "Redis", "Pub/Sub broker")
+    System(domain, "Domain Microservices", "Sensor / Building / Aggregator / Control / Actuator")
+}
+
+Rel(user, spa, "Views dashboard,\nadjusts thermostat", "HTTPS")
+Rel(spa, bff, "HTTP: commands/queries/requests\nWS: subscribe + push", "JSON / WebSocket")
+Rel(bff, redis, "PUB/SUB", "RESP")
+Rel(domain, redis, "PUB/SUB", "RESP")
+
+@enduml

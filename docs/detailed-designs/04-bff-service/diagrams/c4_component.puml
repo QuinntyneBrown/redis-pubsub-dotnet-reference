@@ -1,0 +1,34 @@
+@startuml c4_component
+!theme plain
+!include <C4/C4_Component>
+
+title BFF Service - Component Diagram
+
+Container(spa, "Angular SPA", "Browser")
+ContainerDb(redis, "Redis", "Redis 7")
+
+Container_Boundary(bff, "BFF Service") {
+    Component(http, "HTTP Endpoints", "ASP.NET Minimal API", "POST /api/{commands,queries,requests}")
+    Component(hub, "BffHub", "SignalR Hub at /hub", "Send / Subscribe / Unsubscribe + OnMessage")
+    Component(bridge, "MessageBusBridge", ".NET", "type+payload -> IMessageBus.SendAsync")
+    Component(types, "MessageTypeRegistry", ".NET", "Scan Contracts assembly; name -> Type")
+    Component(subs, "SubscriptionRegistry", ".NET", "connectionId <-> set<channel>")
+    Component(listener, "BusListener", "IHostedService", "Pattern-subscribe tel.*/evt.*; route to subs")
+    Component(bus, "RedisBus IMessageBus", "RedisBus library", "PublishAsync / SendAsync")
+}
+
+Rel(spa, http, "POST /api/...", "JSON/HTTPS")
+Rel(spa, hub, "Send / Subscribe / Unsubscribe\n(receive: OnMessage)", "WebSocket")
+
+Rel(http, bridge, "Dispatch")
+Rel(hub, bridge, "Dispatch (Send method)")
+Rel(hub, subs, "Add / Remove on subscribe/disconnect")
+Rel(bridge, types, "Resolve CLR type")
+Rel(bridge, bus, "SendAsync<TResponse>")
+
+Rel(bus, redis, "PUBLISH cmd/qry/req", "RESP")
+Rel(listener, redis, "SUBSCRIBE tel.*, evt.*", "RESP")
+Rel(listener, subs, "ConnectionsFor(channel)")
+Rel(listener, hub, "Clients.Client(id).OnMessage(...)")
+
+@enduml

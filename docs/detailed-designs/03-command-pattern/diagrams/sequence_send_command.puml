@@ -1,0 +1,31 @@
+@startuml sequence_send_command
+!theme plain
+skinparam sequenceMessageAlign center
+
+title Send a command and receive a response
+
+participant "Issuer App" as App
+participant "MessageBus" as Bus
+participant "PendingReplies" as Pend
+database "Redis" as Redis
+participant "Responder Service" as Resp
+
+App -> Bus: SendAsync(new StartSimulation(...))
+Bus -> Pend: Register(correlationId, timeout)
+Bus -> Redis: PUBLISH cmd.Contracts.StartSimulation\n{ correlationId, replyTo, payload }
+
+Redis -> Resp: deliver on cmd.Contracts.StartSimulation
+Resp -> Resp: Pipeline.log + validate
+Resp -> Resp: IRespond<StartSimulation, Ack>.RespondAsync()
+Resp -> Redis: PUBLISH rep.{svc}.{instance}\n{ correlationId, payload = Ack }
+
+Redis -> Bus: deliver on reply channel
+Bus -> Pend: TryComplete(correlationId, payload)
+Bus --> App: StartSimulationAck
+
+note over App
+    On no-reply within timeout,
+    SendAsync throws TimeoutException.
+end note
+
+@enduml

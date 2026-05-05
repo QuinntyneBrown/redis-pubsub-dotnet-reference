@@ -1,0 +1,20 @@
+@startuml c4_context
+!theme plain
+!include <C4/C4_Context>
+
+title BFF Service - System Context
+
+Person(user, "Operator", "Uses the dashboard in a web browser")
+System(spa, "Angular Dashboard", "Browser SPA - Angular Material + Chart.js + SignalR client")
+System(bff, "BFF Service", ".NET 9 - HTTP + SignalR over WebSockets")
+System_Boundary(backend, "Backend Mesh") {
+    System(redis, "Redis", "Pub/Sub broker")
+    System(domain, "Domain Microservices", "Sensor / Building / Aggregator / Control / Actuator")
+}
+
+Rel(user, spa, "Uses", "HTTPS")
+Rel(spa, bff, "HTTP commands/queries/requests\n+ SignalR (WebSocket)", "JSON / WS")
+Rel(bff, redis, "PUBLISH / SUBSCRIBE", "RESP")
+Rel(domain, redis, "PUBLISH / SUBSCRIBE", "RESP")
+
+@enduml

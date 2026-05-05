@@ -1,0 +1,62 @@
+@startuml class_diagram
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+
+title Angular Dashboard - Domain Model
+
+class SignalRClient {
+    -HubConnection conn
+    +start(): Promise<void>
+    +subscribe(channel): Promise<void>
+    +unsubscribe(channel): Promise<void>
+    +unsubscribeAll(): Promise<void>
+    +send<T>(typeName, payload): Promise<T>
+    +messages$: Observable<{channel, envelope}>
+    +connectionState$: Observable<state>
+}
+
+class BackendClient {
+    +command<T>(type, payload): Promise<T>
+    +query<T>(type, payload): Promise<T>
+    +request<T>(type, payload): Promise<T>
+}
+
+class RoomStateStore {
+    -BehaviorSubject<RoomSnapshot[]> _rooms
+    +rooms$: Observable<RoomSnapshot[]>
+    +seed(): Promise<void>
+}
+
+class TelemetryStore {
+    -Map<roomId, Point[]> _series
+    +temperatureSeries$: Observable<Map<roomId, Point[]>>
+}
+
+class DashboardComponent {
+    +ngOnInit()
+    +ngOnDestroy()
+}
+
+class TemperatureChartComponent
+class RoomsTableComponent
+class ThermostatControlComponent
+
+DashboardComponent --> SignalRClient
+DashboardComponent --> BackendClient
+DashboardComponent --> RoomStateStore
+DashboardComponent --> TelemetryStore
+
+DashboardComponent *-- TemperatureChartComponent
+DashboardComponent *-- RoomsTableComponent
+DashboardComponent *-- ThermostatControlComponent
+
+TemperatureChartComponent --> TelemetryStore
+RoomsTableComponent --> RoomStateStore
+ThermostatControlComponent --> BackendClient
+
+RoomStateStore --> SignalRClient : messages$
+RoomStateStore --> BackendClient : ListRooms seed
+TelemetryStore --> SignalRClient : messages$
+
+@enduml

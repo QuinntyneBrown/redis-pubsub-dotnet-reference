@@ -1,0 +1,33 @@
+@startuml sequence_signalr_command
+!theme plain
+skinparam sequenceMessageAlign center
+
+title SignalR Command -> SignalR Response
+
+actor User
+participant "Angular SPA" as SPA
+participant "BffHub" as Hub
+participant "MessageBusBridge" as Br
+participant "IMessageBus" as Bus
+database "Redis" as Redis
+participant "Control Service" as Ctrl
+
+User -> SPA: change thermostat -> Submit
+SPA -> Hub: invoke("Send",\n  "Contracts.Requests.SetThermostat",\n  { roomId, targetC })
+Hub -> Br: SendAsync(name, payload)
+Br -> Bus: SendAsync<SetThermostatAck>(typed)
+Bus -> Redis: PUBLISH req.Contracts.SetThermostat
+Redis -> Ctrl: deliver
+Ctrl -> Redis: PUBLISH rep.bff.{instance}\n(after orchestration)
+Redis -> Bus: deliver reply
+Bus --> Br: SetThermostatAck
+Br --> Hub: object
+Hub --> SPA: response (resolves invoke promise)
+SPA --> User: snackbar "applied 22.5 C"
+
+note right of Hub
+    Single duplex stream:
+    no separate HTTP round trip.
+end note
+
+@enduml

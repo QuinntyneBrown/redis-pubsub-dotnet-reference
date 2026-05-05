@@ -13,9 +13,10 @@ A small reference application demonstrating four Redis Pub/Sub messaging pattern
 
 ## Layout
 
-- `src/RedisBus/` — the shared messaging library
-- `tests/RedisBus.UnitTests/` — fast in-process tests
-- `tests/RedisBus.IntegrationTests/` — Testcontainers-backed end-to-end tests (require Docker)
+- `backend/src/RedisBus/` — the shared messaging library
+- `backend/src/{ApiGateway,SensorService,TelemetryAggregator,BuildingService,ControlService,ActuatorService}/` — six microservices
+- `backend/tests/RedisBus.UnitTests/` — fast in-process tests
+- `backend/tests/RedisBus.IntegrationTests/` — Testcontainers-backed end-to-end tests (require Docker)
 - `docs/detailed-designs/` — per-feature design docs
 
 See `docs/folder-structure.md` for the full layout and `docs/detailed-designs/00-index.md` for the design index.
@@ -23,7 +24,7 @@ See `docs/folder-structure.md` for the full layout and `docs/detailed-designs/00
 ## Build and test
 
 ```bash
-dotnet build
-dotnet test tests/RedisBus.UnitTests/RedisBus.UnitTests.csproj
-dotnet test tests/RedisBus.IntegrationTests/RedisBus.IntegrationTests.csproj   # needs Docker
+dotnet build backend/RedisPubSubReference.sln
+dotnet test backend/tests/RedisBus.UnitTests/RedisBus.UnitTests.csproj
+dotnet test backend/tests/RedisBus.IntegrationTests/RedisBus.IntegrationTests.csproj   # needs Docker
 ```

@@ -1,0 +1,49 @@
+@startuml class_diagram
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+
+title BFF Service - Domain Model
+
+class BffHub <<SignalR Hub>> {
+    +Send(typeName, payload): Task<JsonElement>
+    +Subscribe(channel): Task
+    +Unsubscribe(channel): Task
+    +UnsubscribeAll(): Task
+    +OnDisconnectedAsync(): Task
+}
+
+class MessageBusBridge {
+    +SendAsync(typeName, payload, ct): Task<object>
+}
+
+class MessageTypeRegistry {
+    -Dictionary<string, Type> _byName
+    +Resolve(name): Type?
+}
+
+class SubscriptionRegistry {
+    -ConcurrentDictionary<string, Set<string>> _byConn
+    +Add(connectionId, channel)
+    +Remove(connectionId, channel)
+    +Clear(connectionId)
+    +ConnectionsFor(channel): IEnumerable<string>
+}
+
+class BusListener <<IHostedService>> {
+    -IConnectionMultiplexer _redis
+    -IHubContext<BffHub> _hub
+    +StartAsync(): Task
+    +StopAsync(): Task
+}
+
+class "IMessageBus" as Bus <<RedisBus>>
+
+BffHub --> MessageBusBridge : Send dispatches via
+BffHub --> SubscriptionRegistry : updates on subscribe
+MessageBusBridge --> MessageTypeRegistry : resolves type
+MessageBusBridge --> Bus : SendAsync<T>
+BusListener --> SubscriptionRegistry : reads
+BusListener --> BffHub : pushes via IHubContext
+
+@enduml

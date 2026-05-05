@@ -1,0 +1,36 @@
+@startuml sequence_subscribe_receive
+!theme plain
+skinparam sequenceMessageAlign center
+
+title Subscribe and receive event/telemetry
+
+actor User
+participant "Angular SPA" as SPA
+participant "BffHub" as Hub
+participant "SubscriptionRegistry" as Subs
+participant "BusListener" as Lis
+database "Redis" as Redis
+participant "Sensor Service" as Sensor
+
+User -> SPA: open dashboard
+SPA -> Hub: invoke("Subscribe", "tel.Contracts.TemperatureReading")
+Hub -> Subs: Add(connectionId, channel)
+Hub --> SPA: ack
+
+== cyclic telemetry ==
+
+Sensor -> Redis: PUBLISH tel.Contracts.TemperatureReading\n{ envelope }
+Redis -> Lis: pattern match tel.*
+Lis -> Subs: ConnectionsFor("tel.Contracts.TemperatureReading")
+Subs --> Lis: [connectionId, ...]
+Lis -> Hub: Clients.Client(id).OnMessage(channel, envelopeJson)
+Hub --> SPA: OnMessage(channel, envelope)
+SPA -> SPA: TelemetryStore.append(point)\nChartComponent re-renders (throttled)
+
+== unsubscribe ==
+
+User -> SPA: leave dashboard
+SPA -> Hub: invoke("Unsubscribe", "tel.Contracts.TemperatureReading")
+Hub -> Subs: Remove(connectionId, channel)
+
+@enduml

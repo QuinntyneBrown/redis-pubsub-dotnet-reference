@@ -1,0 +1,31 @@
+@startuml c4_container
+!theme plain
+!include <C4/C4_Container>
+
+title BFF Service - Container Diagram
+
+Person(user, "Operator", "Web browser")
+Container(spa, "Angular Dashboard", "Angular + Material + Chart.js", "SignalR client + HttpClient")
+
+System_Boundary(sys, "Smart Building Reference") {
+    Container(bff, "BFF", ".NET 9 / SignalR", "Frontend door: HTTP + WebSocket -> RedisBus")
+    ContainerDb(redis, "Redis", "Redis 7", "Pub/Sub broker")
+
+    Container(sensor, "Sensor Service", ".NET 9", "Publishes telemetry cyclically")
+    Container(agg, "Telemetry Aggregator", ".NET 9", "Rolls up + threshold events")
+    Container(building, "Building Service", ".NET 9", "Domain of record; query responder")
+    Container(control, "Control Service", ".NET 9", "Command/request orchestrator")
+    Container(actuator, "Actuator Service", ".NET 9", "Applies physical commands; publishes ThermostatChanged")
+}
+
+Rel(user, spa, "Uses", "HTTPS")
+Rel(spa, bff, "POST /api/{commands,queries,requests}\nWS /hub", "JSON / WebSocket")
+
+Rel(bff, redis, "PUBLISH / SUBSCRIBE", "RESP")
+Rel(sensor, redis, "PUBLISH tel.*", "RESP")
+Rel(agg, redis, "SUB tel.*\nPUB evt.*", "RESP")
+Rel(building, redis, "SUB tel.*/evt.*\nPUB evt.*\nRESPOND qry.*", "RESP")
+Rel(control, redis, "RESPOND req.SetThermostat\nSEND req.ApplyThermostat", "RESP")
+Rel(actuator, redis, "RESPOND req.ApplyThermostat\nPUB evt.ThermostatChanged", "RESP")
+
+@enduml

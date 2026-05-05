@@ -1,0 +1,39 @@
+@startuml c4_component
+!theme plain
+!include <C4/C4_Component>
+
+title Angular Dashboard - Component Diagram
+
+Container(bff, "BFF", ".NET 9 / SignalR")
+
+Container_Boundary(spa, "Angular SPA") {
+    Component(shell, "AppShellComponent", "Angular standalone", "Material toolbar + status chip")
+    Component(dash, "DashboardComponent", "Angular standalone", "Composes the three live widgets")
+    Component(chart, "TemperatureChartComponent", "Angular + Chart.js", "Live line chart, one line per room")
+    Component(table, "RoomsTableComponent", "Angular Material mat-table", "Live room snapshot table")
+    Component(thermo, "ThermostatControlComponent", "Angular Material form", "Slider + submit -> command")
+
+    Component(sr, "SignalRClient", "Service", "@microsoft/signalr HubConnection")
+    Component(http, "BackendClient", "Service", "HttpClient command/query/request")
+    Component(rs, "RoomStateStore", "Service", "BehaviorSubject<RoomSnapshot[]>")
+    Component(ts, "TelemetryStore", "Service", "Rolling temperature series per room")
+}
+
+Rel(shell, dash, "renders")
+Rel(dash, chart, "renders")
+Rel(dash, table, "renders")
+Rel(dash, thermo, "renders")
+
+Rel(dash, sr, "start / subscribe")
+Rel(table, rs, "rooms$")
+Rel(chart, ts, "temperatureSeries$")
+Rel(thermo, http, "command()")
+
+Rel(rs, sr, "messages$ (evt.*)")
+Rel(ts, sr, "messages$ (tel.*)")
+Rel(rs, http, "ListRooms (seed)")
+
+Rel(sr, bff, "WebSocket /hub", "WS")
+Rel(http, bff, "POST /api/...", "JSON/HTTPS")
+
+@enduml

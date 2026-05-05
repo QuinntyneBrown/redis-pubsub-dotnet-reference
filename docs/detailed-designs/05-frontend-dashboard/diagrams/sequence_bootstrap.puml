@@ -1,0 +1,43 @@
+@startuml sequence_bootstrap
+!theme plain
+skinparam sequenceMessageAlign center
+
+title Bootstrap: connect, subscribe, seed, render
+
+actor User
+participant "Browser" as Br
+participant "DashboardComponent" as Dash
+participant "SignalRClient" as SR
+participant "BackendClient" as BC
+participant "BFF" as BFF
+participant "RoomStateStore" as RS
+participant "TelemetryStore" as TS
+participant "Chart / Table" as UI
+
+User -> Br: navigate to /
+Br -> Dash: ngOnInit()
+
+Dash -> SR: start()
+SR -> BFF: WS connect /hub
+BFF --> SR: connected
+
+Dash -> SR: subscribe(tel.Contracts.TemperatureReading)
+Dash -> SR: subscribe(tel.Contracts.OccupancyReading)
+Dash -> SR: subscribe(evt.Contracts.RoomOccupancyChanged)
+Dash -> SR: subscribe(evt.Contracts.ThermostatChanged)
+
+Dash -> RS: seed()
+RS -> BC: query("Contracts.Queries.ListRooms", {})
+BC -> BFF: POST /api/queries
+BFF --> BC: ListRoomsResult
+BC --> RS: rooms[]
+RS --> UI: rooms$ emits
+
+== live updates ==
+
+BFF -> SR: OnMessage("tel.Contracts.TemperatureReading", envelope)
+SR -> TS: append point
+TS --> UI: temperatureSeries$ emits
+UI --> User: chart updates (throttled)
+
+@enduml

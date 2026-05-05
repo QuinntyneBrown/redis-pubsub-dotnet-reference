@@ -1,0 +1,29 @@
+@startuml sequence_http_query
+!theme plain
+skinparam sequenceMessageAlign center
+
+title HTTP Query -> HTTP Response
+
+actor User
+participant "Angular SPA" as SPA
+participant "BFF HTTP\n/api/queries" as HTTP
+participant "MessageBusBridge" as Br
+participant "IMessageBus" as Bus
+database "Redis" as Redis
+participant "Building Service" as Building
+
+User -> SPA: open dashboard
+SPA -> HTTP: POST /api/queries\n{ type: "Contracts.Queries.ListRooms", payload: {} }
+HTTP -> Br: SendAsync(name, payload)
+Br -> Br: resolve CLR type via\nMessageTypeRegistry
+Br -> Bus: SendAsync<ListRoomsResult>(typed query)
+Bus -> Redis: PUBLISH qry.Contracts.ListRooms
+Redis -> Building: deliver
+Building -> Redis: PUBLISH rep.bff.{instance}\n{ correlationId, payload = result }
+Redis -> Bus: deliver reply
+Bus --> Br: ListRoomsResult
+Br --> HTTP: object
+HTTP --> SPA: 200 OK\n{ rooms: [...] }
+SPA --> User: render table
+
+@enduml
