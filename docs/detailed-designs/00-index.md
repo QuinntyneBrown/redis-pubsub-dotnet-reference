@@ -5,7 +5,7 @@ Reference application demonstrating Redis Pub/Sub patterns across .NET microserv
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
 | 01 | [Messaging Library (RedisBus)](01-messaging-library/README.md) | Complete | Radically-simple common library for telemetry, events, query/response, and request/response over Redis Pub/Sub |
-| 02 | [Reference Application — Smart Building](02-reference-application/README.md) | Draft | Six .NET microservices that exemplify each pattern using the library |
+| 02 | [Reference Application — Smart Building](02-reference-application/README.md) | Accepted | Six .NET microservices that exemplify each pattern using the library |
 
 ## Reading order
 

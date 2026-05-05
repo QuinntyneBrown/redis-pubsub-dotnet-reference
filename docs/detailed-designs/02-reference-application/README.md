@@ -1,5 +1,7 @@
 # Reference Application — Smart Building — Detailed Design
 
+**Status:** Accepted
+
 ## 1. Overview
 
 A six-service .NET reference application that exemplifies every pattern provided by the [RedisBus library](../01-messaging-library/README.md). The chosen domain — a smart building with sensors, rooms, and actuators — is realistic enough to make the patterns distinct without inviting domain complexity that would distract from them.
