@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { IBackendClient } from './contracts';
-import { BFF_BASE_URL } from './tokens';
+import { IBackendClient } from './backend-client.contract';
+import { BFF_BASE_URL } from './bff-base-url.contract';
 
 @Injectable({ providedIn: 'root' })
 export class BackendClient implements IBackendClient {

@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, filter } from 'rxjs';
-import { IBackendClient, IRoomStateStore, ISignalRClient } from './contracts';
+import { IBackendClient } from './backend-client.contract';
 import { RoomOccupancyChanged, RoomStatus, ThermostatChanged } from './models';
-import { BACKEND_CLIENT, SIGNALR_CLIENT } from './tokens';
+import { BACKEND_CLIENT } from './backend-client.contract';
+import { IRoomStateStore } from './room-state-store.contract';
+import { ISignalRClient, SIGNALR_CLIENT } from './signalr-client.contract';
 
 @Injectable({ providedIn: 'root' })
 export class RoomStateStore implements IRoomStateStore {

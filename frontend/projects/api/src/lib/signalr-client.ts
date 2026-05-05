@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { BusMessage, ISignalRClient } from './contracts';
+import { BFF_BASE_URL } from './bff-base-url.contract';
+import { BusMessage, ISignalRClient } from './signalr-client.contract';
 import { ConnectionState } from './models';
-import { BFF_BASE_URL } from './tokens';
 
 @Injectable({ providedIn: 'root' })
 export class SignalRClient implements ISignalRClient {

@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, filter } from 'rxjs';
-import { ISignalRClient, ITelemetryStore } from './contracts';
+import { ITelemetryStore } from './telemetry-store.contract';
 import { Point, TemperatureReading } from './models';
-import { SIGNALR_CLIENT } from './tokens';
+import { ISignalRClient, SIGNALR_CLIENT } from './signalr-client.contract';
 
 const WINDOW_MS = 5 * 60 * 1000;
 
