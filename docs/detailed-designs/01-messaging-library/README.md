@@ -1,5 +1,7 @@
 # Messaging Library (RedisBus) — Detailed Design
 
+**Status:** Accepted
+
 ## 1. Overview
 
 `RedisBus` is the small common library that every microservice in this reference application takes a dependency on. It hides the mechanics of Redis Pub/Sub behind a tiny surface so that an application developer can declare a message type, register a handler, and never write Redis code.
