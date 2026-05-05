@@ -1,0 +1,49 @@
+:root,
+.signalstream-theme {
+  --ss-accent-primary: #00d9ff;
+  --ss-accent-primary-dim: #0891b2;
+  --ss-accent-secondary: #a855f7;
+  --ss-border-default: #2a2a33;
+  --ss-border-strong: #3a3a45;
+  --ss-border-subtle: #1f1f25;
+  --ss-live-pulse: #22c55e;
+  --ss-status-error: #ef4444;
+  --ss-status-info: #3b82f6;
+  --ss-status-success: #22c55e;
+  --ss-status-warning: #f59e0b;
+  --ss-surface-base: #000000;
+  --ss-surface-1: #0a0a0a;
+  --ss-surface-2: #111114;
+  --ss-surface-3: #16161b;
+  --ss-surface-elevated: #1c1c22;
+  --ss-surface-overlay: #22222a;
+  --ss-text-faint: #52525b;
+  --ss-text-muted: #71717a;
+  --ss-text-primary: #ffffff;
+  --ss-text-secondary: #a1a1aa;
+  --ss-radius-sm: 2px;
+  --ss-radius-md: 4px;
+  --ss-font-body:
+    'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ss-font-mono:
+    'Geist Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+  background: var(--ss-surface-base);
+  color: var(--ss-text-primary);
+  font-family: var(--ss-font-body);
+}
+
+.material-symbols-sharp,
+.mat-icon.material-symbols-sharp {
+  font-family: 'Material Symbols Sharp', 'Material Icons', sans-serif;
+  font-size: 20px;
+  font-weight: normal;
+  font-style: normal;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 20;
+  line-height: 1;
+  letter-spacing: 0;
+}

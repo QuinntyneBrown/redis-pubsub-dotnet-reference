@@ -1,6 +1,6 @@
 # Frontend Application — Angular Dashboard — Detailed Design
 
-**Status:** Draft
+**Status:** Accepted
 
 ## 1. Overview
 

@@ -8,7 +8,7 @@ Reference application demonstrating Redis Pub/Sub patterns across .NET microserv
 | 02 | [Reference Application — Smart Building](02-reference-application/README.md) | Complete | Six .NET microservices that exemplify each pattern using the library |
 | 03 | [Command Pattern Extension](03-command-pattern/README.md) | Complete | Adds `ICommand<TResponse>` (channel `cmd.*`) as a fifth pattern alongside telemetry / event / query / request |
 | 04 | [Backend-for-Frontend (BFF) Service](04-bff-service/README.md) | Complete | Single frontend door — HTTP for command/query/request + SignalR hub for selective subscription and push |
-| 05 | [Frontend Dashboard — Angular](05-frontend-dashboard/README.md) | Draft | Dark-themed Angular Material SPA with Chart.js line charts, Material tables, and a thermostat command form |
+| 05 | [Frontend Dashboard — Angular](05-frontend-dashboard/README.md) | Accepted | Dark-themed Angular Material SPA with Chart.js line charts, Material tables, and a thermostat command form |
 
 ## Reading order
 
