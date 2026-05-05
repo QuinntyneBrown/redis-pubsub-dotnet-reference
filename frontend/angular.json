@@ -109,6 +109,17 @@
                   "with": "projects/smart-building-demo/src/environments/environment.development.ts"
                 }
               ]
+            },
+            "interface-boundary-testing": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/smart-building-demo/src/environments/environment.ts",
+                  "with": "projects/smart-building-demo/src/environments/environment.interface-boundary-testing.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -121,6 +132,9 @@
             },
             "development": {
               "buildTarget": "smart-building-demo:build:development"
+            },
+            "interface-boundary-testing": {
+              "buildTarget": "smart-building-demo:build:interface-boundary-testing"
             }
           },
           "defaultConfiguration": "development"
