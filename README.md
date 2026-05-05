@@ -28,3 +28,19 @@ dotnet build backend/RedisPubSubReference.sln
 dotnet test backend/tests/RedisBus.UnitTests/RedisBus.UnitTests.csproj
 dotnet test backend/tests/RedisBus.IntegrationTests/RedisBus.IntegrationTests.csproj   # needs Docker
 ```
+
+## Running the Angular frontend
+
+From the `frontend/` directory:
+
+**Production configuration** — optimized build served via `ng serve` against the production API at `/api`:
+
+```bash
+ng serve --configuration=production
+```
+
+**Interface-boundary-testing configuration** — unoptimized build with source maps, pointing at a local mock/stub server on `http://localhost:4000`:
+
+```bash
+ng serve --configuration=interface-boundary-testing
+```
