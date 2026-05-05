@@ -23,13 +23,31 @@ export type ConnectionState = 'connected' | 'reconnecting' | 'disconnected';
   `,
   styles: [
     `
-      .shell-toolbar { display: flex; align-items: center; }
-      .spacer { flex: 1 1 auto; }
-      .title { font-weight: 500; }
-      .shell-body { padding: 24px; }
-      .state-connected { background: #22c55e; color: #000; }
-      .state-reconnecting { background: #f59e0b; color: #000; }
-      .state-disconnected { background: #ef4444; color: #fff; }
+      .shell-toolbar {
+        display: flex;
+        align-items: center;
+      }
+      .spacer {
+        flex: 1 1 auto;
+      }
+      .title {
+        font-weight: 500;
+      }
+      .shell-body {
+        padding: 24px;
+      }
+      .state-connected {
+        background: #22c55e;
+        color: #000;
+      }
+      .state-reconnecting {
+        background: #f59e0b;
+        color: #000;
+      }
+      .state-disconnected {
+        background: #ef4444;
+        color: #fff;
+      }
     `,
   ],
 })
@@ -39,9 +57,12 @@ export class AppShellComponent {
 
   stateLabel(): string {
     switch (this.connectionState) {
-      case 'connected': return 'Live';
-      case 'reconnecting': return 'Reconnecting…';
-      case 'disconnected': return 'Offline';
+      case 'connected':
+        return 'Live';
+      case 'reconnecting':
+        return 'Reconnecting…';
+      case 'disconnected':
+        return 'Offline';
     }
   }
 }

@@ -25,7 +25,11 @@
   </div>
 
   <footer class="signal-confirm-dialog__footer">
-    <lib-signal-button variant="ghost" [label]="cancelLabel" (pressed)="onCancel()"></lib-signal-button>
+    <lib-signal-button
+      variant="ghost"
+      [label]="cancelLabel"
+      (pressed)="onCancel()"
+    ></lib-signal-button>
     <lib-signal-button
       [variant]="destructive ? 'destructive' : 'primary'"
       [label]="confirmLabel"

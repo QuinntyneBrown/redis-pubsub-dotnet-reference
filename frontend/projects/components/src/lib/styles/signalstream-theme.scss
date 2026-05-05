@@ -23,10 +23,8 @@
   --ss-text-secondary: #a1a1aa;
   --ss-radius-sm: 2px;
   --ss-radius-md: 4px;
-  --ss-font-body:
-    'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --ss-font-mono:
-    'Geist Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --ss-font-body: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ss-font-mono: 'Geist Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 
   background: var(--ss-surface-base);
   color: var(--ss-text-primary);

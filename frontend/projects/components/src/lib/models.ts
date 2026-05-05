@@ -2,7 +2,7 @@ export type SignalButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructi
 
 export type SignalTone = 'success' | 'warning' | 'error' | 'info' | 'neutral';
 
-export type ConnectionState = 'connected' | 'reconnecting' | 'disconnected' | 'paused';
+export type SignalConnectionState = 'connected' | 'reconnecting' | 'disconnected' | 'paused';
 
 export type SignalTrend = 'up' | 'down' | 'flat';
 

@@ -18,11 +18,14 @@ export class SignalConfirmDialogComponent {
     { optional: true },
   );
 
-  private readonly data = inject<SignalConfirmDialogData | null>(MAT_DIALOG_DATA, { optional: true });
+  private readonly data = inject<SignalConfirmDialogData | null>(MAT_DIALOG_DATA, {
+    optional: true,
+  });
 
   @Input() title = this.data?.title ?? 'Abort pending request?';
   @Input() message =
-    this.data?.message ?? 'This will cancel the command and leave the latest building state intact.';
+    this.data?.message ??
+    'This will cancel the command and leave the latest building state intact.';
   @Input() details = this.data?.details ?? '';
   @Input() confirmLabel = this.data?.confirmLabel ?? 'Abort request';
   @Input() cancelLabel = this.data?.cancelLabel ?? 'Cancel';

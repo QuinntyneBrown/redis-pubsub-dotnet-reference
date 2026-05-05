@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
-import { ConnectionState } from '../models';
+import { SignalConnectionState } from '../models';
 
 @Component({
   selector: 'lib-connection-indicator',
@@ -10,7 +10,7 @@ import { ConnectionState } from '../models';
   styleUrl: './connection-indicator.scss',
 })
 export class ConnectionIndicatorComponent {
-  @Input() state: ConnectionState = 'connected';
+  @Input() state: SignalConnectionState = 'connected';
   @Input() label = '';
   @Input() latency = '';
 

@@ -48,10 +48,20 @@ export interface RoomRow {
   `,
   styles: [
     `
-      :host { display: block; }
-      table { width: 100%; }
-      .occupied { background: #22c55e; color: #000; }
-      .empty { background: #52525b; color: #fff; }
+      :host {
+        display: block;
+      }
+      table {
+        width: 100%;
+      }
+      .occupied {
+        background: #22c55e;
+        color: #000;
+      }
+      .empty {
+        background: #52525b;
+        color: #fff;
+      }
     `,
   ],
 })

@@ -16,8 +16,13 @@ export interface RoomOption {
   selector: 'lib-thermostat-control',
   standalone: true,
   imports: [
-    CommonModule, FormsModule,
-    MatCardModule, MatFormFieldModule, MatSelectModule, MatSliderModule, MatButtonModule,
+    CommonModule,
+    FormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatButtonModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -39,9 +44,7 @@ export interface RoomOption {
         </mat-slider>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-flat-button color="primary"
-                [disabled]="!selectedRoomId"
-                (click)="onSubmit()">
+        <button mat-flat-button color="primary" [disabled]="!selectedRoomId" (click)="onSubmit()">
           Apply
         </button>
       </mat-card-actions>
@@ -49,9 +52,16 @@ export interface RoomOption {
   `,
   styles: [
     `
-      :host { display: block; max-width: 360px; }
-      .full-width { width: 100%; }
-      mat-slider { width: 100%; }
+      :host {
+        display: block;
+        max-width: 360px;
+      }
+      .full-width {
+        width: 100%;
+      }
+      mat-slider {
+        width: 100%;
+      }
     `,
   ],
 })

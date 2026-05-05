@@ -25,7 +25,18 @@ const PALETTE = ['#00d9ff', '#a855f7', '#22c55e', '#f59e0b', '#ef4444', '#3b82f6
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<canvas #canvas></canvas>`,
-  styles: [`:host { display: block; height: 320px; } canvas { width: 100%; height: 100%; }`],
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 320px;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+    `,
+  ],
 })
 export class TemperatureChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() series: Map<string, ChartPoint[]> = new Map();
