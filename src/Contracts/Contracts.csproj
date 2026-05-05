@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Contracts</RootNamespace>
+    <AssemblyName>Contracts</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RedisBus\RedisBus.csproj" />
+  </ItemGroup>
+
+</Project>

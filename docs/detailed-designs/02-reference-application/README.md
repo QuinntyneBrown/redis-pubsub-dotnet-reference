@@ -1,6 +1,6 @@
 # Reference Application — Smart Building — Detailed Design
 
-**Status:** Accepted
+**Status:** Complete
 
 ## 1. Overview
 

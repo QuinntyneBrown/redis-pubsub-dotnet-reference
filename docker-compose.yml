@@ -1,0 +1,69 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: src/ApiGateway/Dockerfile
+    environment:
+      Redis__ConnectionString: redis:6379
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+
+  sensor-service:
+    build:
+      context: .
+      dockerfile: src/SensorService/Dockerfile
+    environment:
+      Redis__ConnectionString: redis:6379
+    depends_on:
+      - redis
+
+  telemetry-aggregator:
+    build:
+      context: .
+      dockerfile: src/TelemetryAggregator/Dockerfile
+    environment:
+      Redis__ConnectionString: redis:6379
+    deploy:
+      replicas: 1
+    depends_on:
+      - redis
+
+  building-service:
+    build:
+      context: .
+      dockerfile: src/BuildingService/Dockerfile
+    environment:
+      Redis__ConnectionString: redis:6379
+    deploy:
+      replicas: 1
+    depends_on:
+      - redis
+
+  control-service:
+    build:
+      context: .
+      dockerfile: src/ControlService/Dockerfile
+    environment:
+      Redis__ConnectionString: redis:6379
+    deploy:
+      replicas: 1
+    depends_on:
+      - redis
+
+  actuator-service:
+    build:
+      context: .
+      dockerfile: src/ActuatorService/Dockerfile
+    environment:
+      Redis__ConnectionString: redis:6379
+    deploy:
+      replicas: 1
+    depends_on:
+      - redis
