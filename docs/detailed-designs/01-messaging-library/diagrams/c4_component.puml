@@ -1,0 +1,36 @@
+@startuml c4_component
+!theme plain
+!include <C4/C4_Component>
+
+title RedisBus - Component Diagram (one service instance)
+
+Container(app, "App Code", ".NET 8")
+ContainerDb(redis, "Redis", "Redis 7")
+
+Container_Boundary(bus, "RedisBus Library") {
+    Component(mbus, "MessageBus", ".NET", "IMessageBus impl - publish / send")
+    Component(host, "BusHostedService", "IHostedService", "Subscribes on startup, dispatches inbound")
+    Component(reg, "HandlerRegistry", ".NET", "Channel -> handler delegate map")
+    Component(pipe, "Pipeline", ".NET", "Log + validate + invoke")
+    Component(pend, "PendingReplies", ".NET", "Correlation id -> TaskCompletionSource")
+    Component(env, "EnvelopeSerializer", "System.Text.Json", "Envelope <-> JSON")
+    Component(name, "ChannelNamer", ".NET", "Type -> channel string")
+    Component(opts, "RedisBusOptions", ".NET", "Connection, service name, timeout")
+}
+
+Rel(app, mbus, "PublishAsync / SendAsync")
+Rel(mbus, env, "Wrap / serialize")
+Rel(mbus, name, "Resolve channel")
+Rel(mbus, pend, "Register waiter")
+Rel(mbus, redis, "PUBLISH", "RESP")
+
+Rel(host, redis, "SUBSCRIBE", "RESP")
+Rel(host, env, "Deserialize")
+Rel(host, reg, "Lookup handler")
+Rel(host, pipe, "Dispatch")
+Rel(host, pend, "Complete waiter (replies)")
+Rel(pipe, app, "Invokes IHandle / IRespond")
+
+Rel(mbus, opts, "reads")
+Rel(host, opts, "reads")
+@enduml

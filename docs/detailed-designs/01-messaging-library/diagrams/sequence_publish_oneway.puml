@@ -1,0 +1,31 @@
+@startuml sequence_publish_oneway
+!theme plain
+skinparam sequenceMessageAlign center
+
+title Publish one-way (telemetry or event)
+
+participant "App\n(publisher)" as App
+participant "MessageBus" as Bus
+participant "Pipeline\n(send)" as PipeS
+queue "Redis\n(channel)" as Redis
+participant "BusHostedService\n(subscriber)" as Host
+participant "Pipeline\n(receive)" as PipeR
+participant "IHandle<T>\n(scoped)" as H
+
+App -> Bus : PublishAsync(msg)
+Bus -> PipeS : log + validate
+Bus -> Bus : envelope = wrap(msg)
+Bus -> Redis : PUBLISH tel.* / evt.* envelope
+Bus --> App : Task complete
+
+Redis -> Host : message arrives
+Host -> Host : deserialize envelope
+Host -> PipeR : log + validate
+PipeR -> H : HandleAsync(msg, ctx, ct)
+H --> PipeR : done
+note right of PipeR
+  Handler exceptions are
+  logged and swallowed.
+  Other subscribers unaffected.
+end note
+@enduml

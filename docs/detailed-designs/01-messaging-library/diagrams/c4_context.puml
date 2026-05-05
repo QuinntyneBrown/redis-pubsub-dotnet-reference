@@ -1,0 +1,15 @@
+@startuml c4_context
+!theme plain
+!include <C4/C4_Context>
+
+title RedisBus - System Context
+
+Person(dev, "Service Developer", "Defines messages and handlers; never writes Redis code")
+System(svcA, "Microservice A", ".NET service hosting the RedisBus library and one or more handlers")
+System(svcB, "Microservice B", ".NET service hosting the RedisBus library and one or more handlers")
+System_Ext(redis, "Redis", "Pub/Sub broker — channels for telemetry, events, queries, requests, replies")
+
+Rel(dev, svcA, "Writes message types and handlers")
+Rel(svcA, redis, "Publishes / subscribes", "RESP")
+Rel(svcB, redis, "Publishes / subscribes", "RESP")
+@enduml

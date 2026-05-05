@@ -1,0 +1,15 @@
+- 6 .NET Microservices
+- Redis Pub Sub
+- Dozens of developers work on different aspects
+- Pub Sub supports
+    - query / query responses
+    - events
+    - telemetry
+    - request / request response
+
+- some microservices just consume telemetry, others consume and publush events, send queries, etc...
+- There are over 200 telemetry messages, dozens of query messages and assoociated response, dozes of requests, dozens and dozens of events
+- query is a request / response channel, an api microservices sends a query and waits on a unique channel for the response for that query. no other consumers for query responsem except issuer
+- messages can have logging and validation
+- radically simple common code for consuming and publishing messages uses Redis Pub SUb
+- Sample application

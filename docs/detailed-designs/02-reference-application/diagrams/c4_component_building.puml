@@ -1,0 +1,30 @@
+@startuml c4_component_building
+!theme plain
+!include <C4/C4_Component>
+
+title building-service - Component Diagram
+
+ContainerDb(redis, "Redis", "Redis 7")
+Container(bus, "RedisBus Library", ".NET 8")
+
+Container_Boundary(svc, "building-service") {
+    Component(state, "Building (in-memory)", ".NET", "Rooms, devices, latest readings")
+    Component(snap, "TelemetrySnapshotHandler", "IHandle<TemperatureReading>, IHandle<OccupancyReading>", "Updates Building from incoming telemetry")
+    Component(evth, "ThresholdEventHandler", "IHandle<RoomTemperatureExceededThreshold>", "Marks room state on threshold cross")
+    Component(qry1, "ListRoomsResponder", "IRespond<ListRooms, ListRoomsResult>", "Returns room summaries")
+    Component(qry2, "GetRoomStatusResponder", "IRespond<GetRoomStatus, RoomStatus>", "Returns one room")
+    Component(occ, "OccupancyChangePublisher", ".NET", "Detects occupancy transitions, publishes RoomOccupancyChanged")
+}
+
+Rel(redis, bus, "tel.*, evt.*, qry.*", "RESP")
+Rel(bus, snap, "dispatch")
+Rel(bus, evth, "dispatch")
+Rel(bus, qry1, "dispatch")
+Rel(bus, qry2, "dispatch")
+Rel(snap, state, "writes")
+Rel(evth, state, "writes")
+Rel(qry1, state, "reads")
+Rel(qry2, state, "reads")
+Rel(occ, state, "reads + writes")
+Rel(occ, bus, "PublishAsync(RoomOccupancyChanged)")
+@enduml

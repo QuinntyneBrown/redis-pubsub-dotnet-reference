@@ -1,0 +1,71 @@
+@startuml class_diagram
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam packageStyle rectangle
+
+title Smart Building - Domain and Message Contracts
+
+package "Domain (in building-service)" {
+    class Building {
+        +Rooms: Dictionary<string, Room>
+    }
+    class Room {
+        +RoomId: string
+        +Name: string
+        +LastTemperatureC: double?
+        +LastOccupancy: int?
+        +LastUpdated: DateTimeOffset
+    }
+    class Device {
+        +DeviceId: string
+        +Kind: DeviceKind
+        +Subkind: string
+        +RoomId: string
+    }
+    enum DeviceKind {
+        Sensor
+        Actuator
+    }
+    Building "1" o-- "*" Room
+    Room "1" o-- "*" Device
+    Device --> DeviceKind
+}
+
+package "Contracts.Telemetry" {
+    class TemperatureReading <<record, ITelemetry>> {
+        +SensorId: string
+        +RoomId: string
+        +Celsius: double
+        +At: DateTimeOffset
+    }
+    class HumidityReading <<record, ITelemetry>>
+    class OccupancyReading <<record, ITelemetry>>
+}
+
+package "Contracts.Events" {
+    class RoomOccupancyChanged <<record, IEvent>>
+    class RoomTemperatureExceededThreshold <<record, IEvent>>
+    class RoomEmpty <<record, IEvent>>
+    class ThermostatChanged <<record, IEvent>>
+}
+
+package "Contracts.Queries" {
+    class ListRooms <<record, IQuery>>
+    class ListRoomsResult <<record>>
+    class GetRoomStatus <<record, IQuery>>
+    class RoomStatus <<record>>
+    ListRooms ..> ListRoomsResult : response
+    GetRoomStatus ..> RoomStatus : response
+}
+
+package "Contracts.Requests" {
+    class SetThermostat <<record, IRequest>>
+    class SetThermostatAck <<record>>
+    class ApplyThermostat <<record, IRequest>>
+    class ApplyThermostatAck <<record>>
+    SetThermostat ..> SetThermostatAck : response
+    ApplyThermostat ..> ApplyThermostatAck : response
+}
+
+@enduml

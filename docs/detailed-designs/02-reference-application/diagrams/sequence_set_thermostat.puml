@@ -1,0 +1,37 @@
+@startuml sequence_set_thermostat
+!theme plain
+skinparam sequenceMessageAlign center
+
+title POST /rooms/{id}/thermostat - request/response (two-hop) + event
+
+actor Operator
+participant "api-gateway" as GW
+queue "Redis" as Redis
+participant "control-service" as CTRL
+participant "actuator-service" as ACT
+participant "building-service" as BLD
+
+Operator -> GW : POST /rooms/R-101/thermostat\n{ targetC: 22 }
+
+GW -> Redis : PUBLISH req.Requests.SetThermostat
+Redis -> CTRL : envelope arrives
+CTRL -> CTRL : SetThermostatResponder\n(applies policy if any)
+
+CTRL -> Redis : PUBLISH req.Requests.ApplyThermostat
+Redis -> ACT : envelope arrives
+ACT -> ACT : ApplyThermostatResponder\n(updates actuator state)
+ACT -> Redis : PUBLISH rep.control-service.{inst}\n(ApplyThermostatAck)
+Redis -> CTRL : reply arrives
+CTRL -> CTRL : PendingReplies completes TCS
+
+CTRL -> Redis : PUBLISH rep.api-gateway.{inst}\n(SetThermostatAck)
+Redis -> GW : reply arrives
+GW --> Operator : 200 OK\n{ deviceId, effectiveC }
+
+== Asynchronous after-effect ==
+
+ACT -> Redis : PUBLISH evt.Events.ThermostatChanged
+Redis -> GW : event (forwarded to SSE clients)
+Redis -> BLD : event (snapshot updated)
+
+@enduml

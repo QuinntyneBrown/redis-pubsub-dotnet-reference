@@ -1,0 +1,87 @@
+@startuml class_diagram
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam packageStyle rectangle
+
+title RedisBus - Public Surface and Key Internals
+
+package "Public API" {
+    interface IMessage
+    interface ITelemetry
+    interface IEvent
+    interface "IQuery<TResponse>" as IQuery
+    interface "IRequest<TResponse>" as IRequest
+
+    ITelemetry --|> IMessage
+    IEvent --|> IMessage
+    IQuery --|> IMessage
+    IRequest --|> IMessage
+
+    interface IMessageBus {
+        +PublishAsync<T>(T msg, CancellationToken ct) : Task
+        +SendAsync<TResponse>(IQuery<TResponse> q, TimeSpan? timeout, CancellationToken ct) : Task<TResponse>
+        +SendAsync<TResponse>(IRequest<TResponse> r, TimeSpan? timeout, CancellationToken ct) : Task<TResponse>
+    }
+
+    interface "IHandle<T>" as IHandle {
+        +HandleAsync(T msg, MessageContext ctx, CancellationToken ct) : Task
+    }
+
+    interface "IRespond<TMsg, TResponse>" as IRespond {
+        +RespondAsync(TMsg msg, MessageContext ctx, CancellationToken ct) : Task<TResponse>
+    }
+
+    class MessageContext {
+        +MessageId: Guid
+        +CorrelationId: Guid
+        +Publisher: string
+        +OccurredAt: DateTimeOffset
+    }
+
+    class RedisBusOptions {
+        +ConnectionString: string
+        +ServiceName: string
+        +InstanceId: string
+        +DefaultTimeout: TimeSpan
+        +HandlerAssemblies: Assembly[]
+    }
+}
+
+package "Internals" {
+    class MessageBus
+    class BusHostedService
+    class HandlerRegistry
+    class Pipeline
+    class PendingReplies
+    class EnvelopeSerializer
+    class ChannelNamer
+    class MessageEnvelope {
+        +MessageId: Guid
+        +CorrelationId: Guid
+        +ReplyTo: string?
+        +Type: string
+        +OccurredAt: DateTimeOffset
+        +Publisher: string
+        +Payload: JsonElement
+    }
+}
+
+MessageBus ..|> IMessageBus
+MessageBus --> ChannelNamer
+MessageBus --> EnvelopeSerializer
+MessageBus --> PendingReplies
+MessageBus --> RedisBusOptions
+
+BusHostedService --> HandlerRegistry
+BusHostedService --> Pipeline
+BusHostedService --> EnvelopeSerializer
+BusHostedService --> PendingReplies
+BusHostedService --> RedisBusOptions
+
+Pipeline ..> IHandle : invokes
+Pipeline ..> IRespond : invokes
+HandlerRegistry ..> ChannelNamer
+EnvelopeSerializer ..> MessageEnvelope
+
+@enduml

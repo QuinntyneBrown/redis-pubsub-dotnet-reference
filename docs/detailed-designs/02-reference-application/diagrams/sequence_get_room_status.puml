@@ -1,0 +1,22 @@
+@startuml sequence_get_room_status
+!theme plain
+skinparam sequenceMessageAlign center
+
+title GET /rooms/{id} - query/response
+
+actor Operator
+participant "api-gateway" as GW
+queue "Redis" as Redis
+participant "building-service" as BLD
+
+Operator -> GW : GET /rooms/R-101
+GW -> GW : SendAsync(new GetRoomStatus("R-101"))
+GW -> Redis : PUBLISH qry.Queries.GetRoomStatus\n(envelope, ReplyTo=rep.api-gateway.{inst})
+Redis -> BLD : envelope arrives
+BLD -> BLD : GetRoomStatusResponder.RespondAsync()
+BLD -> Redis : PUBLISH rep.api-gateway.{inst}\n(reply envelope, RoomStatus payload)
+Redis -> GW : reply arrives
+GW -> GW : PendingReplies completes TCS
+GW --> Operator : 200 OK\n{ roomId, tempC, occupants }
+
+@enduml

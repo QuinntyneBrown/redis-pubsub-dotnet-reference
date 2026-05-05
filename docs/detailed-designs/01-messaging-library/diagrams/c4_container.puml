@@ -1,0 +1,26 @@
+@startuml c4_container
+!theme plain
+!include <C4/C4_Container>
+
+title RedisBus - Container Diagram
+
+Person(dev, "Service Developer")
+
+System_Boundary(sa, "Microservice A") {
+    Container(appA, "App Code", ".NET 8", "Domain logic, calls IMessageBus, declares IHandle/IRespond")
+    Container(busA, "RedisBus Library", ".NET 8 NuGet", "Pub/sub mechanics, envelope, pipeline, reply correlation")
+}
+
+System_Boundary(sb, "Microservice B") {
+    Container(appB, "App Code", ".NET 8", "Domain logic, calls IMessageBus, declares IHandle/IRespond")
+    Container(busB, "RedisBus Library", ".NET 8 NuGet", "Pub/sub mechanics, envelope, pipeline, reply correlation")
+}
+
+ContainerDb(redis, "Redis", "Redis 7", "Pub/Sub broker")
+
+Rel(dev, appA, "Edits")
+Rel(appA, busA, "IMessageBus, IHandle<T>, IRespond<T,R>", "in-process")
+Rel(appB, busB, "IMessageBus, IHandle<T>, IRespond<T,R>", "in-process")
+Rel(busA, redis, "PUBLISH / SUBSCRIBE", "RESP")
+Rel(busB, redis, "PUBLISH / SUBSCRIBE", "RESP")
+@enduml

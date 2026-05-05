@@ -1,0 +1,28 @@
+@startuml c4_container
+!theme plain
+!include <C4/C4_Container>
+
+title Smart Building Reference App - Container Diagram
+
+Person(op, "Operator")
+
+System_Boundary(app, "Smart Building App") {
+    Container(gw, "api-gateway", ".NET 8 / ASP.NET", "HTTP front door, SSE streams")
+    Container(sensor, "sensor-service", ".NET 8 Worker", "Simulates sensors, publishes telemetry")
+    Container(agg, "telemetry-aggregator", ".NET 8 Worker", "Rolling aggregates, derived events")
+    Container(building, "building-service", ".NET 8", "Domain of record, query responder")
+    Container(control, "control-service", ".NET 8", "Write-side coordinator, request responder")
+    Container(actuator, "actuator-service", ".NET 8", "Executes commands, publishes change events")
+
+    ContainerDb(redis, "Redis", "Redis 7", "Pub/Sub broker")
+}
+
+Rel(op, gw, "HTTP / SSE", "REST + SSE")
+
+Rel(gw, redis, "qry / req out, evt+tel in", "RESP")
+Rel(sensor, redis, "tel out", "RESP")
+Rel(agg, redis, "tel in, evt out", "RESP")
+Rel(building, redis, "qry in, tel+evt in, evt out", "RESP")
+Rel(control, redis, "req in/out", "RESP")
+Rel(actuator, redis, "req in, evt out", "RESP")
+@enduml

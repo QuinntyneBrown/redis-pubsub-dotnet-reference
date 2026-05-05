@@ -1,0 +1,13 @@
+@startuml c4_context
+!theme plain
+!include <C4/C4_Context>
+
+title Smart Building Reference App - System Context
+
+Person(op, "Operator", "Inspects rooms and changes setpoints over HTTP")
+System(app, "Smart Building App", "Six .NET microservices on Redis Pub/Sub")
+System_Ext(devices, "Physical Devices", "Sensors and actuators - simulated in this reference app")
+
+Rel(op, app, "HTTP / SSE", "REST + Server-Sent Events")
+Rel(devices, app, "Provides readings, executes commands", "abstracted")
+@enduml

@@ -1,0 +1,41 @@
+@startuml topology
+!theme plain
+skinparam componentFontSize 12
+skinparam ArrowFontSize 10
+left to right direction
+
+title Message Topology - producers, consumers, responders
+
+component "api-gateway" as GW
+component "sensor-service" as SENSOR
+component "telemetry-aggregator" as AGG
+component "building-service" as BLD
+component "control-service" as CTRL
+component "actuator-service" as ACT
+
+queue "tel.TemperatureReading\ntel.HumidityReading\ntel.OccupancyReading" as TEL
+queue "evt.RoomOccupancyChanged\nevt.RoomTemperatureExceededThreshold\nevt.RoomEmpty\nevt.ThermostatChanged" as EVT
+queue "qry.ListRooms\nqry.GetRoomStatus" as QRY
+queue "req.SetThermostat" as REQ_SET
+queue "req.ApplyThermostat" as REQ_APP
+
+SENSOR --> TEL : publish
+TEL --> AGG : subscribe
+TEL --> BLD : subscribe
+TEL --> GW : subscribe (SSE relay)
+
+AGG --> EVT : publish (derived)
+BLD --> EVT : publish (occupancy)
+ACT --> EVT : publish (thermostat)
+EVT --> GW : subscribe (SSE relay)
+EVT --> BLD : subscribe (snapshot)
+
+GW --> QRY : send
+QRY --> BLD : respond
+
+GW --> REQ_SET : send
+REQ_SET --> CTRL : respond
+CTRL --> REQ_APP : send
+REQ_APP --> ACT : respond
+
+@enduml

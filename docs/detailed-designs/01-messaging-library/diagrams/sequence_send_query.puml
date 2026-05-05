@@ -1,0 +1,34 @@
+@startuml sequence_send_query
+!theme plain
+skinparam sequenceMessageAlign center
+
+title Send query or request, await response
+
+participant "App\n(issuer)" as App
+participant "MessageBus\n(issuer side)" as IBus
+participant "PendingReplies" as Pend
+queue "Redis" as Redis
+participant "BusHostedService\n(responder side)" as Host
+participant "IRespond<TMsg, TR>\n(scoped)" as R
+participant "BusHostedService\n(issuer side)" as IHost
+
+App -> IBus : SendAsync(query, timeout)
+IBus -> Pend : register TCS by correlationId
+IBus -> Redis : PUBLISH qry.* / req.*\n(envelope, ReplyTo=rep.svc.inst)
+
+Redis -> Host : envelope arrives
+Host -> R : RespondAsync(msg, ctx, ct)
+R --> Host : response
+Host -> Redis : PUBLISH rep.svc.inst\n(reply envelope, same correlationId)
+
+Redis -> IHost : reply arrives
+IHost -> Pend : complete TCS by correlationId
+Pend --> IBus : task completes
+IBus --> App : TResponse
+
+note over IBus
+  On timeout, TCS is cancelled
+  and SendAsync throws
+  TimeoutException.
+end note
+@enduml
